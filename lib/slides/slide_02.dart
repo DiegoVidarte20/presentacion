@@ -12,6 +12,7 @@ class _Slide02State extends State<Slide02> with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _fadeIn;
   late final Animation<Offset> _slideTitle;
+  late final Animation<double> _cardsIn;
 
   @override
   void initState() {
@@ -27,14 +28,17 @@ class _Slide02State extends State<Slide02> with SingleTickerProviderStateMixin {
       curve: const Interval(0.0, 1.0, curve: Curves.easeOut),
     );
 
-    _slideTitle = Tween<Offset>(
-      begin: const Offset(0, 0.08),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.05, 0.7, curve: Curves.easeOutCubic),
-      ),
+    _slideTitle = Tween<Offset>(begin: const Offset(0, 0.08), end: Offset.zero)
+        .animate(
+          CurvedAnimation(
+            parent: _controller,
+            curve: const Interval(0.05, 0.55, curve: Curves.easeOutCubic),
+          ),
+        );
+
+    _cardsIn = CurvedAnimation(
+      parent: _controller,
+      curve: const Interval(0.20, 1.0, curve: Curves.easeOutBack),
     );
 
     _controller.forward();
@@ -46,8 +50,12 @@ class _Slide02State extends State<Slide02> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
-  TextStyle _t(double s, double size,
-      {FontWeight fw = FontWeight.w600, Color col = Colors.white}) {
+  TextStyle _t(
+    double s,
+    double size, {
+    FontWeight fw = FontWeight.w600,
+    Color col = Colors.white,
+  }) {
     return TextStyle(
       fontSize: size * s,
       fontWeight: fw,
@@ -64,6 +72,12 @@ class _Slide02State extends State<Slide02> with SingleTickerProviderStateMixin {
         final w = c.maxWidth;
         final s = (w / 1400).clamp(0.75, 1.25);
 
+        // 👇 Ajusta tamaños si quieres
+        final cardSize = 340.0 * s; // cuadrado blanco
+        final cardGap = 80.0 * s; // separación entre cards
+        final borderW = 3.0 * s;
+        final borderCol = const Color(0xFF2EC4FF);
+
         return AnimatedBuilder(
           animation: _controller,
           builder: (_, __) {
@@ -72,89 +86,100 @@ class _Slide02State extends State<Slide02> with SingleTickerProviderStateMixin {
                 // ===== Fondo con imagen =====
                 Positioned.fill(
                   child: Image.asset(
-                    'assets/slide1/fondoslide1.jpeg', // <-- cambia ruta
+                    'assets/slide1/fondoslide1.jpeg', // <-- pon tu fondo del slide2 si tienes
                     fit: BoxFit.cover,
                   ),
                 ),
 
-                // ===== Overlay para legibilidad =====
+                // ===== Overlay (azul izq + rojo der + oscurecer) =====
                 Positioned.fill(
                   child: Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
                         colors: [
-                          Colors.black.withValues(alpha: 0.25),
-                          Colors.black.withValues(alpha: 0.60),
+                          const Color(0xFF0086C9).withValues(alpha: 0.25),
+                          Colors.black.withValues(alpha: 0.35),
+                          const Color(0xFFFF2B2B).withValues(alpha: 0.22),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned.fill(
+                  child: Container(color: Colors.black.withValues(alpha: 0.20)),
+                ),
+
+                // ===== Títulos arriba izquierda =====
+                Positioned(
+                  left: 52 * s,
+                  top: 42 * s,
+                  child: FadeTransition(
+                    opacity: _fadeIn,
+                    child: SlideTransition(
+                      position: _slideTitle,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'CTRL X CORE',
+                            style: _t(
+                              s,
+                              30,
+                              fw: FontWeight.w500,
+                            ).copyWith(letterSpacing: 1.2),
+                          ),
+                          SizedBox(height: 18 * s),
+                          Text(
+                            'CTRL X CORE - Ventajas',
+                            style: _t(s, 34, fw: FontWeight.w500),
+                          ),
                         ],
                       ),
                     ),
                   ),
                 ),
 
-                // ===== Contenido =====
+                // ===== 3 imágenes centradas =====
                 Positioned.fill(
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(60 * s, 42 * s, 60 * s, 120 * s),
+                    padding: EdgeInsets.only(
+                      left: 90 * s,
+                      right: 90 * s,
+                      top: 170 * s,
+                      bottom: 140 * s, // deja espacio al footer
+                    ),
                     child: FadeTransition(
                       opacity: _fadeIn,
-                      child: SlideTransition(
-                        position: _slideTitle,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      child: ScaleTransition(
+                        scale: Tween<double>(
+                          begin: 0.96,
+                          end: 1.0,
+                        ).animate(_cardsIn),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              'OBJETIVO',
-                              style: _t(s, 46, fw: FontWeight.w700)
-                                  .copyWith(letterSpacing: 1.2),
+                            _IconCard(
+                              size: cardSize,
+                              borderW: borderW,
+                              borderCol: borderCol,
+                              // ✅ cambia a tu asset real
+                              imagePath: 'assets/slide2/icono1.jpeg',
                             ),
-                            SizedBox(height: 10 * s),
-                            Container(
-                              width: 520 * s,
-                              height: 2 * s,
-                              color: Colors.white.withValues(alpha: 0.35),
+                            SizedBox(width: cardGap),
+                            _IconCard(
+                              size: cardSize,
+                              borderW: borderW,
+                              borderCol: borderCol,
+                              imagePath: 'assets/slide2/icono2.jpeg',
                             ),
-                            SizedBox(height: 26 * s),
-
-                            // Bloque de texto base
-                            Text(
-                              '• Integrar ctrlX CORE con los dispositivos de campo.\n'
-                              '• Estandarizar comunicación y monitoreo.\n'
-                              '• Preparar base para escalamiento y analítica.',
-                              style: _t(
-                                s,
-                                26,
-                                fw: FontWeight.w400,
-                                col: Colors.white.withValues(alpha: 0.92),
-                              ).copyWith(height: 1.45),
-                            ),
-
-                            const Spacer(),
-
-                            // Tarjetita simple (placeholder)
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Container(
-                                width: 520 * s,
-                                padding: EdgeInsets.all(18 * s),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16 * s),
-                                  color: Colors.white.withValues(alpha: 0.08),
-                                  border: Border.all(
-                                    color: Colors.white.withValues(alpha: 0.14),
-                                  ),
-                                ),
-                                child: Text(
-                                  'Placeholder de contenido\n(puedes meter una imagen, diagrama o bullets)',
-                                  style: _t(
-                                    s,
-                                    16,
-                                    fw: FontWeight.w500,
-                                    col: Colors.white.withValues(alpha: 0.80),
-                                  ),
-                                ),
-                              ),
+                            SizedBox(width: cardGap),
+                            _IconCard(
+                              size: cardSize,
+                              borderW: borderW,
+                              borderCol: borderCol,
+                              imagePath: 'assets/slide2/icono3.jpeg',
                             ),
                           ],
                         ),
@@ -178,6 +203,43 @@ class _Slide02State extends State<Slide02> with SingleTickerProviderStateMixin {
           },
         );
       },
+    );
+  }
+}
+
+class _IconCard extends StatelessWidget {
+  final double size;
+  final double borderW;
+  final Color borderCol;
+  final String imagePath;
+
+  const _IconCard({
+    required this.size,
+    required this.borderW,
+    required this.borderCol,
+    required this.imagePath,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: borderCol, width: borderW),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.35),
+            blurRadius: 18,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(size * 0.10),
+        child: Image.asset(imagePath, fit: BoxFit.contain),
+      ),
     );
   }
 }

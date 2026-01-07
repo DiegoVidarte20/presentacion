@@ -3,6 +3,15 @@ import 'package:flutter/services.dart';
 
 import 'slide_01.dart';
 import 'slide_02.dart';
+import 'slide_3.dart';
+import 'slide_04.dart';
+import 'slide_05.dart';
+import 'slide_06.dart';
+import 'slide_07.dart';
+import 'slide_08.dart';
+import 'slide_09.dart';
+import 'slide_10.dart';
+import 'slide_11.dart';
 
 class Slides extends StatefulWidget {
   const Slides({super.key});
@@ -18,6 +27,15 @@ class _SlidesState extends State<Slides> {
   late final List<Widget> _slides = const [
     Slide01(),
     Slide02(),
+    Slide03(),
+    Slide04(),
+    Slide05(),
+    Slide06(),
+    Slide07(),
+    Slide08(),
+    Slide09(),
+    Slide10(),
+    Slide11(),
   ];
 
   int get _total => _slides.length;
