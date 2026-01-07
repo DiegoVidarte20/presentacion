@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:ui' show ImageFilter;
 
+import 'package:presentacion/ui/footer_band.dart';
+
 class Slide01 extends StatefulWidget {
   const Slide01({super.key});
 
@@ -32,19 +34,19 @@ class _Slide01State extends State<Slide01> with SingleTickerProviderStateMixin {
 
     _slideTitle = Tween<Offset>(begin: const Offset(-0.3, 0), end: Offset.zero)
         .animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.0, 0.5, curve: Curves.easeOutCubic),
-      ),
-    );
+          CurvedAnimation(
+            parent: _controller,
+            curve: const Interval(0.0, 0.5, curve: Curves.easeOutCubic),
+          ),
+        );
 
     _slideLogo = Tween<Offset>(begin: const Offset(0.3, 0), end: Offset.zero)
         .animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.0, 0.5, curve: Curves.easeOutCubic),
-      ),
-    );
+          CurvedAnimation(
+            parent: _controller,
+            curve: const Interval(0.0, 0.5, curve: Curves.easeOutCubic),
+          ),
+        );
 
     _scaleDevices = Tween<double>(begin: 0.8, end: 1.0).animate(
       CurvedAnimation(
@@ -74,14 +76,13 @@ class _Slide01State extends State<Slide01> with SingleTickerProviderStateMixin {
           double size, {
           FontWeight fw = FontWeight.w600,
           Color col = Colors.white,
-        }) =>
-            TextStyle(
-              fontSize: size * s,
-              fontWeight: fw,
-              color: col,
-              height: 1.1,
-              letterSpacing: 0.5,
-            );
+        }) => TextStyle(
+          fontSize: size * s,
+          fontWeight: fw,
+          color: col,
+          height: 1.1,
+          letterSpacing: 0.5,
+        );
 
         return AnimatedBuilder(
           animation: _controller,
@@ -89,7 +90,29 @@ class _Slide01State extends State<Slide01> with SingleTickerProviderStateMixin {
             return Stack(
               children: [
                 // Fondo con gradiente animado
-                const Positioned.fill(child: _Bg()),
+                // Fondo con imagen
+                Positioned.fill(
+                  child: Image.asset(
+                    'assets/slide1/fondoslide1.jpeg', // <-- cambia a tu ruta real
+                    fit: BoxFit.cover,
+                  ),
+                ),
+
+                // Overlay oscuro suave para legibilidad
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.black.withValues(alpha: 0.25),
+                          Colors.black.withValues(alpha: 0.55),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
 
                 // Partículas flotantes
                 const Positioned.fill(child: _FloatingParticles()),
@@ -132,8 +155,10 @@ class _Slide01State extends State<Slide01> with SingleTickerProviderStateMixin {
                           const SizedBox(height: 8),
                           _GlowText(
                             'AUTOMATION',
-                            t(28, fw: FontWeight.w300)
-                                .copyWith(letterSpacing: 8 * s),
+                            t(
+                              28,
+                              fw: FontWeight.w300,
+                            ).copyWith(letterSpacing: 8 * s),
                           ),
                         ],
                       ),
@@ -150,41 +175,38 @@ class _Slide01State extends State<Slide01> with SingleTickerProviderStateMixin {
                       top: 170 * s,
                       bottom: 170 * s,
                     ),
-                    child: ScaleTransition(
-                      scale: _scaleDevices,
-                      child: FadeTransition(
-                        opacity: _fadeIn,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: _DeviceCard(
-                                imagePath: 'assets/slide1/plc.png',
-                                label: 'X3',
-                                scale: s,
-                                delay: 0,
-                              ),
+                    child: FadeTransition(
+                      opacity: _fadeIn,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: _DeviceCard(
+                              imagePath: 'assets/slide1/plc.png',
+                              label: 'X3',
+                              scale: s,
+                              delay: 0,
                             ),
-                            SizedBox(width: 34 * s),
-                            Expanded(
-                              child: _DeviceCard(
-                                imagePath: 'assets/slide1/plc2.png',
-                                label: 'X5',
-                                scale: s,
-                                delay: 200,
-                              ),
+                          ),
+                          SizedBox(width: 34 * s),
+                          Expanded(
+                            child: _DeviceCard(
+                              imagePath: 'assets/slide1/plc2.png',
+                              label: 'X5',
+                              scale: s,
+                              delay: 200,
                             ),
-                            SizedBox(width: 34 * s),
-                            Expanded(
-                              child: _DeviceCard(
-                                imagePath: 'assets/slide1/plc3.png',
-                                label: 'X7',
-                                scale: s,
-                                delay: 400,
-                              ),
+                          ),
+                          SizedBox(width: 34 * s),
+                          Expanded(
+                            child: _DeviceCard(
+                              imagePath: 'assets/slide1/plc3.png',
+                              label: 'X7',
+                              scale: s,
+                              delay: 400,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -194,14 +216,16 @@ class _Slide01State extends State<Slide01> with SingleTickerProviderStateMixin {
                 Positioned(
                   left: 0,
                   right: 0,
-                  bottom: 84 * s,
+                  bottom: 128 * s, // ✅ antes: 84*s
                   child: FadeTransition(
                     opacity: _fadeIn,
                     child: Center(
                       child: _GlowText(
                         'DOS PASOS ADELANTE',
-                        t(46, fw: FontWeight.w300)
-                            .copyWith(letterSpacing: 14 * s),
+                        t(
+                          46,
+                          fw: FontWeight.w300,
+                        ).copyWith(letterSpacing: 14 * s),
                         glowIntensity: 0.6,
                       ),
                     ),
@@ -215,7 +239,7 @@ class _Slide01State extends State<Slide01> with SingleTickerProviderStateMixin {
                   bottom: 0,
                   child: FadeTransition(
                     opacity: _fadeIn,
-                    child: _FooterBand(scale: s, t: t),
+                    child: FooterBand(scale: s),
                   ),
                 ),
               ],
@@ -236,27 +260,13 @@ class _LogoCtrlX extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF2EC4FF).withValues(alpha: .4),
-            blurRadius: 30 * scale,
-            spreadRadius: 5 * scale,
-          ),
-          BoxShadow(
-            color: const Color(0xFFFF2B2B).withValues(alpha: .3),
-            blurRadius: 20 * scale,
-            spreadRadius: 3 * scale,
-          ),
-        ],
-      ),
       child: RichText(
         text: TextSpan(
           style: TextStyle(
             fontSize: 68 * scale,
             fontWeight: FontWeight.w800,
             shadows: [
-              Shadow(color: const Color(0xFF2EC4FF), blurRadius: 20 * scale),
+              Shadow(color: const Color(0xFF2EC4FF), blurRadius: 10 * scale),
             ],
           ),
           children: const [
@@ -268,7 +278,7 @@ class _LogoCtrlX extends StatelessWidget {
               text: 'X',
               style: TextStyle(
                 color: Color(0xFFFF2B2B),
-                shadows: [Shadow(color: Color(0xFFFF2B2B), blurRadius: 20)],
+                shadows: [Shadow(color: Color(0xFFFF2B2B), blurRadius: 10)],
               ),
             ),
           ],
@@ -297,8 +307,9 @@ class _GlowText extends StatelessWidget {
             blurRadius: 15,
           ),
           Shadow(
-            color: const Color(0xFF2EC4FF)
-                .withValues(alpha: glowIntensity * 0.6),
+            color: const Color(
+              0xFF2EC4FF,
+            ).withValues(alpha: glowIntensity * 0.6),
             blurRadius: 25,
           ),
         ],
@@ -338,10 +349,11 @@ class _FloatingParticles extends StatelessWidget {
                           : Colors.white,
                       boxShadow: [
                         BoxShadow(
-                          color: (i % 2 == 0
-                                  ? const Color(0xFF2EC4FF)
-                                  : Colors.white)
-                              .withValues(alpha: .5),
+                          color:
+                              (i % 2 == 0
+                                      ? const Color(0xFF2EC4FF)
+                                      : Colors.white)
+                                  .withValues(alpha: .5),
                           blurRadius: 8,
                           spreadRadius: 2,
                         ),
@@ -420,11 +432,11 @@ class _Bg extends StatelessWidget {
 }
 
 // === Card de dispositivo con hover ===
-class _DeviceCard extends StatefulWidget {
+class _DeviceCard extends StatelessWidget {
   final String imagePath;
   final String label;
   final double scale;
-  final int delay;
+  final int delay; // lo dejo para que no rompa llamadas, pero ya no se usa
 
   const _DeviceCard({
     required this.imagePath,
@@ -434,205 +446,26 @@ class _DeviceCard extends StatefulWidget {
   });
 
   @override
-  State<_DeviceCard> createState() => _DeviceCardState();
-}
-
-class _DeviceCardState extends State<_DeviceCard> {
-  bool _isHovered = false;
-
-  @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: TweenAnimationBuilder<double>(
-        tween: Tween(begin: 0, end: 1),
-        duration: Duration(milliseconds: 800 + widget.delay),
-        curve: Curves.easeOutBack,
-        builder: (context, value, child) {
-          return AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOut,
-            transform: Matrix4.identity()
-              ..translate(0.0, _isHovered ? -15.0 * widget.scale : 0.0)
-              ..scale(_isHovered ? 1.05 : 1.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // ✅ IMAGEN SIN FILTROS / SIN EFECTOS (solo la imagen)
-                Image.asset(
-                  widget.imagePath,
-                  fit: BoxFit.contain,
-                  height: 320 * widget.scale,
-                  filterQuality: FilterQuality.none,
-                  isAntiAlias: false,
-                ),
-
-                SizedBox(height: 18 * widget.scale),
-
-                AnimatedDefaultTextStyle(
-                  duration: const Duration(milliseconds: 300),
-                  style: TextStyle(
-                    fontSize: (38 + (_isHovered ? 4 : 0)) * widget.scale,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                    letterSpacing: 1.5,
-                    shadows: _isHovered
-                        ? [
-                            const Shadow(
-                              color: Color(0xFF2EC4FF),
-                              blurRadius: 15,
-                            ),
-                            const Shadow(color: Colors.white, blurRadius: 8),
-                          ]
-                        : [],
-                  ),
-                  child: Text(widget.label),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class _FooterBand extends StatelessWidget {
-  final double scale;
-  final TextStyle Function(double, {FontWeight fw, Color col}) t;
-
-  const _FooterBand({required this.scale, required this.t});
-
-  @override
-  Widget build(BuildContext context) {
-    final h = 78.0 * scale; // altura franja
-    final padX = 44.0 * scale;
-
-    return SizedBox(
-      height: h + (10 * scale), // + barra inferior
-      child: Stack(
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Fondo glassy (no blanco plano)
-          Positioned.fill(
-            bottom: 10 * scale,
-            child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(14 * scale),
-                topRight: Radius.circular(14 * scale),
-              ),
-              child: BackdropFilter(
-                filter:
-                    ImageFilter.blur(sigmaX: 10 * scale, sigmaY: 10 * scale),
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.white.withValues(alpha: 0.08),
-                        Colors.white.withValues(alpha: 0.18),
-                      ],
-                    ),
-                    border: Border(
-                      top: BorderSide(
-                        color: Colors.white.withValues(alpha: 0.16),
-                        width: 1,
-                      ),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 30 * scale,
-                        spreadRadius: 2 * scale,
-                        color: Colors.black.withValues(alpha: 0.25),
-                        offset: Offset(0, -6 * scale),
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: padX),
-                    child: Row(
-                      children: [
-                        // Info pequeña izquierda (tipo PPT)
-                        Expanded(
-                          child: DefaultTextStyle(
-                            style: t(
-                              12,
-                              fw: FontWeight.w500,
-                              col: Colors.white.withValues(alpha: 0.85),
-                            ).copyWith(letterSpacing: 0.2),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text('Bosch Rexroth Perú | 16.08.2024'),
-                                SizedBox(height: 4 * scale),
-                                Text(
-                                  'Av. Argentina 3618, Callao, PE',
-                                  style: t(
-                                    12,
-                                    fw: FontWeight.w400,
-                                    col: Colors.white.withValues(alpha: 0.70),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-
-                        // Marca derecha (más fina, menos “bloque”)
-                        Opacity(
-                          opacity: 0.92,
-                          child: Row(
-                            children: [
-                              Text(
-                                'rexroth',
-                                style: t(28, fw: FontWeight.w800)
-                                    .copyWith(letterSpacing: 0.5),
-                              ),
-                              SizedBox(width: 10 * scale),
-                              Text(
-                                'A Bosch Company',
-                                style: t(
-                                  12,
-                                  fw: FontWeight.w500,
-                                  col: Colors.white.withValues(alpha: 0.70),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
+          Image.asset(
+            imagePath,
+            fit: BoxFit.contain,
+            height: 320 * scale,
+            filterQuality: FilterQuality.none,
+            isAntiAlias: false,
           ),
-
-          // Barra inferior tipo “línea de color” (no chirriante)
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            height: 10 * scale,
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    const Color(0xFF2EC4FF).withValues(alpha: 0.95),
-                    const Color(0xFF0B3C6E).withValues(alpha: 0.95),
-                    const Color(0xFFFF2B2B).withValues(alpha: 0.95),
-                  ],
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.35),
-                    blurRadius: 12 * scale,
-                    offset: Offset(0, -2 * scale),
-                  ),
-                ],
-              ),
+          SizedBox(height: 18 * scale),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 38 * scale,
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
+              letterSpacing: 1.5,
             ),
           ),
         ],
