@@ -32,19 +32,19 @@ class _Slide01State extends State<Slide01> with SingleTickerProviderStateMixin {
 
     _slideTitle = Tween<Offset>(begin: const Offset(-0.3, 0), end: Offset.zero)
         .animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.0, 0.5, curve: Curves.easeOutCubic),
-      ),
-    );
+          CurvedAnimation(
+            parent: _controller,
+            curve: const Interval(0.0, 0.5, curve: Curves.easeOutCubic),
+          ),
+        );
 
     _slideLogo = Tween<Offset>(begin: const Offset(0.3, 0), end: Offset.zero)
         .animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.0, 0.5, curve: Curves.easeOutCubic),
-      ),
-    );
+          CurvedAnimation(
+            parent: _controller,
+            curve: const Interval(0.0, 0.5, curve: Curves.easeOutCubic),
+          ),
+        );
 
     _scaleDevices = Tween<double>(begin: 0.8, end: 1.0).animate(
       CurvedAnimation(
@@ -74,14 +74,13 @@ class _Slide01State extends State<Slide01> with SingleTickerProviderStateMixin {
           double size, {
           FontWeight fw = FontWeight.w600,
           Color col = Colors.white,
-        }) =>
-            TextStyle(
-              fontSize: size * s,
-              fontWeight: fw,
-              color: col,
-              height: 1.1,
-              letterSpacing: 0.5,
-            );
+        }) => TextStyle(
+          fontSize: size * s,
+          fontWeight: fw,
+          color: col,
+          height: 1.1,
+          letterSpacing: 0.5,
+        );
 
         return AnimatedBuilder(
           animation: _controller,
@@ -132,8 +131,10 @@ class _Slide01State extends State<Slide01> with SingleTickerProviderStateMixin {
                           const SizedBox(height: 8),
                           _GlowText(
                             'AUTOMATION',
-                            t(28, fw: FontWeight.w300)
-                                .copyWith(letterSpacing: 8 * s),
+                            t(
+                              28,
+                              fw: FontWeight.w300,
+                            ).copyWith(letterSpacing: 8 * s),
                           ),
                         ],
                       ),
@@ -150,41 +151,38 @@ class _Slide01State extends State<Slide01> with SingleTickerProviderStateMixin {
                       top: 170 * s,
                       bottom: 170 * s,
                     ),
-                    child: ScaleTransition(
-                      scale: _scaleDevices,
-                      child: FadeTransition(
-                        opacity: _fadeIn,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: _DeviceCard(
-                                imagePath: 'assets/slide1/plc.png',
-                                label: 'X3',
-                                scale: s,
-                                delay: 0,
-                              ),
+                    child: FadeTransition(
+                      opacity: _fadeIn,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: _DeviceCard(
+                              imagePath: 'assets/slide1/plc.png',
+                              label: 'X3',
+                              scale: s,
+                              delay: 0,
                             ),
-                            SizedBox(width: 34 * s),
-                            Expanded(
-                              child: _DeviceCard(
-                                imagePath: 'assets/slide1/plc2.png',
-                                label: 'X5',
-                                scale: s,
-                                delay: 200,
-                              ),
+                          ),
+                          SizedBox(width: 34 * s),
+                          Expanded(
+                            child: _DeviceCard(
+                              imagePath: 'assets/slide1/plc2.png',
+                              label: 'X5',
+                              scale: s,
+                              delay: 200,
                             ),
-                            SizedBox(width: 34 * s),
-                            Expanded(
-                              child: _DeviceCard(
-                                imagePath: 'assets/slide1/plc3.png',
-                                label: 'X7',
-                                scale: s,
-                                delay: 400,
-                              ),
+                          ),
+                          SizedBox(width: 34 * s),
+                          Expanded(
+                            child: _DeviceCard(
+                              imagePath: 'assets/slide1/plc3.png',
+                              label: 'X7',
+                              scale: s,
+                              delay: 400,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -200,8 +198,10 @@ class _Slide01State extends State<Slide01> with SingleTickerProviderStateMixin {
                     child: Center(
                       child: _GlowText(
                         'DOS PASOS ADELANTE',
-                        t(46, fw: FontWeight.w300)
-                            .copyWith(letterSpacing: 14 * s),
+                        t(
+                          46,
+                          fw: FontWeight.w300,
+                        ).copyWith(letterSpacing: 14 * s),
                         glowIntensity: 0.6,
                       ),
                     ),
@@ -297,8 +297,9 @@ class _GlowText extends StatelessWidget {
             blurRadius: 15,
           ),
           Shadow(
-            color: const Color(0xFF2EC4FF)
-                .withValues(alpha: glowIntensity * 0.6),
+            color: const Color(
+              0xFF2EC4FF,
+            ).withValues(alpha: glowIntensity * 0.6),
             blurRadius: 25,
           ),
         ],
@@ -338,10 +339,11 @@ class _FloatingParticles extends StatelessWidget {
                           : Colors.white,
                       boxShadow: [
                         BoxShadow(
-                          color: (i % 2 == 0
-                                  ? const Color(0xFF2EC4FF)
-                                  : Colors.white)
-                              .withValues(alpha: .5),
+                          color:
+                              (i % 2 == 0
+                                      ? const Color(0xFF2EC4FF)
+                                      : Colors.white)
+                                  .withValues(alpha: .5),
                           blurRadius: 8,
                           spreadRadius: 2,
                         ),
@@ -522,8 +524,10 @@ class _FooterBand extends StatelessWidget {
                 topRight: Radius.circular(14 * scale),
               ),
               child: BackdropFilter(
-                filter:
-                    ImageFilter.blur(sigmaX: 10 * scale, sigmaY: 10 * scale),
+                filter: ImageFilter.blur(
+                  sigmaX: 10 * scale,
+                  sigmaY: 10 * scale,
+                ),
                 child: Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -587,8 +591,10 @@ class _FooterBand extends StatelessWidget {
                             children: [
                               Text(
                                 'rexroth',
-                                style: t(28, fw: FontWeight.w800)
-                                    .copyWith(letterSpacing: 0.5),
+                                style: t(
+                                  28,
+                                  fw: FontWeight.w800,
+                                ).copyWith(letterSpacing: 0.5),
                               ),
                               SizedBox(width: 10 * scale),
                               Text(
