@@ -59,6 +59,16 @@ flutter:
   assets:
     - assets/slide1/
     - assets/slide2/
+    - assets/slide12/
+    - assets/slide13/
+    - assets/slide14/
+    - assets/slide15/
+    - assets/slide16/
+    - assets/slide17/
+    - assets/slide18/
+    - assets/slide19/
+    - assets/slide20/
+    
 
   # To add assets to your application, add an assets section, like this:
   # assets:

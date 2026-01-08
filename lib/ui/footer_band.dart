@@ -8,31 +8,29 @@ class FooterBand extends StatelessWidget {
   final String line1;
   final String line2;
 
-  // Marca derecha
-  final String brand;
-  final String subBrand;
+  // ✅ Logo fijo (global) para todos los slides
+  static const String _logoAsset =
+      'assets/slide1/logo-rex.png'; // <-- CAMBIA TU RUTA REAL
+  static const double _logoHeight = 28; // altura base (se multiplica por scale)
 
   const FooterBand({
     super.key,
     required this.scale,
     this.line1 = 'Bosch Rexroth Perú | 16.08.2024',
     this.line2 = 'Av. Argentina 3618, Callao, PE',
-    this.brand = 'rexroth',
-    this.subBrand = 'A Bosch Company',
   });
 
   TextStyle _t(
     double size, {
     FontWeight fw = FontWeight.w600,
-    Color col = Colors.white,
-  }) =>
-      TextStyle(
-        fontSize: size * scale,
-        fontWeight: fw,
-        color: col,
-        height: 1.1,
-        letterSpacing: 0.5,
-      );
+    Color col = Colors.black,
+  }) => TextStyle(
+    fontSize: size * scale,
+    fontWeight: fw,
+    color: col,
+    height: 1.1,
+    letterSpacing: 0.5,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -57,29 +55,23 @@ class FooterBand extends StatelessWidget {
                 ),
                 child: Container(
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.white.withValues(alpha: 0.08),
-                        Colors.white.withValues(alpha: 0.18),
-                      ],
-                    ),
+                    color: Colors.white.withValues(alpha: 0.96),
                     border: Border(
                       top: BorderSide(
-                        color: Colors.white.withValues(alpha: 0.16),
+                        color: Colors.black.withValues(alpha: 0.10),
                         width: 1,
                       ),
                     ),
                     boxShadow: [
                       BoxShadow(
-                        blurRadius: 30 * scale,
+                        blurRadius: 26 * scale,
                         spreadRadius: 2 * scale,
-                        color: Colors.black.withValues(alpha: 0.25),
+                        color: Colors.black.withValues(alpha: 0.18),
                         offset: Offset(0, -6 * scale),
                       ),
                     ],
                   ),
+
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: padX),
                     child: Row(
@@ -89,8 +81,8 @@ class FooterBand extends StatelessWidget {
                           child: DefaultTextStyle(
                             style: _t(
                               12,
-                              fw: FontWeight.w500,
-                              col: Colors.white.withValues(alpha: 0.85),
+                              fw: FontWeight.w600,
+                              col: Colors.black.withValues(alpha: 0.85),
                             ).copyWith(letterSpacing: 0.2),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -102,8 +94,8 @@ class FooterBand extends StatelessWidget {
                                   line2,
                                   style: _t(
                                     12,
-                                    fw: FontWeight.w400,
-                                    col: Colors.white.withValues(alpha: 0.70),
+                                    fw: FontWeight.w500,
+                                    col: Colors.black.withValues(alpha: 0.70),
                                   ),
                                 ),
                               ],
@@ -111,26 +103,22 @@ class FooterBand extends StatelessWidget {
                           ),
                         ),
 
-                        // ===== Derecha (Marca) =====
+                        // ===== Derecha (Logo fijo) =====
                         Opacity(
-                          opacity: 0.92,
-                          child: Row(
-                            children: [
-                              Text(
-                                brand,
-                                style: _t(28, fw: FontWeight.w800)
-                                    .copyWith(letterSpacing: 0.5),
+                          opacity: 0.98,
+                          child: SizedBox(
+                            height: 44 * scale, // 👈 antes 28, ahora más grande
+                            width:
+                                220 *
+                                scale, // 👈 reserva espacio para que no se comprima
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Image.asset(
+                                _logoAsset,
+                                fit: BoxFit.contain,
+                                filterQuality: FilterQuality.high,
                               ),
-                              SizedBox(width: 10 * scale),
-                              Text(
-                                subBrand,
-                                style: _t(
-                                  12,
-                                  fw: FontWeight.w500,
-                                  col: Colors.white.withValues(alpha: 0.70),
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
                         ),
                       ],

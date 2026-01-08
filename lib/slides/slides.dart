@@ -12,6 +12,15 @@ import 'slide_08.dart';
 import 'slide_09.dart';
 import 'slide_10.dart';
 import 'slide_11.dart';
+import 'slide_12.dart';
+import 'slide_13.dart';
+import 'slide_14.dart';
+import 'slide_15.dart';
+import 'slide_16.dart';
+import 'slide_17.dart';
+import 'slide_18.dart';
+import 'slide_19.dart';
+import 'slide_20.dart';
 
 class Slides extends StatefulWidget {
   const Slides({super.key});
@@ -36,6 +45,16 @@ class _SlidesState extends State<Slides> {
     Slide09(),
     Slide10(),
     Slide11(),
+    Slide12(),
+    Slide13(),
+    Slide14(),
+    Slide15(),
+    Slide16(),
+    Slide17(),
+    Slide18(),
+    Slide19(),
+    Slide20(),
+
   ];
 
   int get _total => _slides.length;
@@ -102,7 +121,7 @@ class _SlidesState extends State<Slides> {
                 child: Text(
                   '${_index + 1}/$_total',
                   style: const TextStyle(
-                    color: Colors.white54,
+                    color: Color.fromARGB(137, 0, 0, 0),
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
