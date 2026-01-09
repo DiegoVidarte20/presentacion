@@ -105,8 +105,8 @@ class _Slide20State extends State<Slide20> with SingleTickerProviderStateMixin {
                     children: [
                       SlideTransition(
                         position: _titleIn,
-                        child: _TopHeadline(
-                          s: s,
+                        child: _HeaderGlass(
+                          scale: s,
                           title: "Programación IEC y NO-IEC",
                         ),
                       ),
@@ -116,12 +116,12 @@ class _Slide20State extends State<Slide20> with SingleTickerProviderStateMixin {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            // ================= LEFT CARD (TEXT) =================
+                            // ================= LEFT GLASS (TEXT) =================
                             Expanded(
                               flex: 44,
                               child: SlideTransition(
                                 position: _leftIn,
-                                child: _WhiteCard(
+                                child: _GlassCard(
                                   s: s,
                                   radius: 30,
                                   padding: EdgeInsets.fromLTRB(
@@ -130,19 +130,19 @@ class _Slide20State extends State<Slide20> with SingleTickerProviderStateMixin {
                                     18 * s,
                                     16 * s,
                                   ),
-                                  child: _LeftContent(s: s),
+                                  child: _LeftContentGlass(s: s),
                                 ),
                               ),
                             ),
 
                             SizedBox(width: 18 * s),
 
-                            // ================= RIGHT CARD (3 IMAGES) =================
+                            // ================= RIGHT GLASS (3 IMAGES) =================
                             Expanded(
                               flex: 56,
                               child: SlideTransition(
                                 position: _rightIn,
-                                child: _WhiteCard(
+                                child: _GlassCard(
                                   s: s,
                                   radius: 34,
                                   padding: EdgeInsets.fromLTRB(
@@ -153,13 +153,12 @@ class _Slide20State extends State<Slide20> with SingleTickerProviderStateMixin {
                                   ),
                                   child: Column(
                                     children: [
-                                      // ---- top row: 2 images
                                       Expanded(
                                         flex: 52,
                                         child: Row(
                                           children: [
                                             Expanded(
-                                              child: _ImagePane(
+                                              child: _ImagePaneGlass(
                                                 s: s,
                                                 asset: imgTopLeft,
                                                 radius: 18,
@@ -167,7 +166,7 @@ class _Slide20State extends State<Slide20> with SingleTickerProviderStateMixin {
                                             ),
                                             SizedBox(width: 12 * s),
                                             Expanded(
-                                              child: _ImagePane(
+                                              child: _ImagePaneGlass(
                                                 s: s,
                                                 asset: imgTopRight,
                                                 radius: 18,
@@ -177,11 +176,9 @@ class _Slide20State extends State<Slide20> with SingleTickerProviderStateMixin {
                                         ),
                                       ),
                                       SizedBox(height: 12 * s),
-
-                                      // ---- bottom: 1 big image
                                       Expanded(
                                         flex: 48,
-                                        child: _ImagePane(
+                                        child: _ImagePaneGlass(
                                           s: s,
                                           asset: imgBottom,
                                           radius: 22,
@@ -202,7 +199,6 @@ class _Slide20State extends State<Slide20> with SingleTickerProviderStateMixin {
             ),
           ),
 
-          // ===== Footer reusable =====
           Positioned(
             left: 0,
             right: 0,
@@ -218,81 +214,199 @@ class _Slide20State extends State<Slide20> with SingleTickerProviderStateMixin {
   }
 }
 
-// ===================== LEFT CONTENT =====================
+// ===================== HEADER GLASS =====================
 
-class _LeftContent extends StatelessWidget {
-  final double s;
-  const _LeftContent({required this.s});
+class _HeaderGlass extends StatelessWidget {
+  final double scale;
+  final String title;
+
+  const _HeaderGlass({required this.scale, required this.title});
 
   @override
   Widget build(BuildContext context) {
-    final titleStyle = TextStyle(
-      fontSize: 20 * s,
-      fontWeight: FontWeight.w900,
-      height: 1.15,
-      color: const Color(0xFF0B1B2B).withOpacity(0.96),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(18 * scale),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: 22 * scale,
+            vertical: 14 * scale,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(18 * scale),
+            color: Colors.white.withOpacity(0.10),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.14),
+              width: 1.6,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.30),
+                blurRadius: 26 * scale,
+                offset: Offset(0, 12 * scale),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 10 * scale,
+                height: 34 * scale,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(99),
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      const Color(0xFF2EC4FF).withOpacity(0.95),
+                      const Color(0xFFFF2B2B).withOpacity(0.85),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(width: 14 * scale),
+              Expanded(
+                child: Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 52 * scale,
+                    height: 1.0,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 0.2,
+                    color: Colors.white.withOpacity(0.96),
+                    shadows: [
+                      Shadow(
+                        blurRadius: 22,
+                        offset: const Offset(0, 10),
+                        color: Colors.black.withOpacity(0.35),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
+  }
+}
+
+// ===================== LEFT CONTENT (GLASS) =====================
+
+class _LeftContentGlass extends StatelessWidget {
+  final double s;
+  const _LeftContentGlass({required this.s});
+
+  @override
+  Widget build(BuildContext context) {
+    // Esto hace que el “1.” y “2.” NO se vean “salidos”
+    // y además alinea bullets/texto debajo del título (bonito y limpio).
+    final indent = (34 + 12) * s; // ancho badge + gap
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("1.    Entorno de Software", style: titleStyle),
+        _SectionTitleGlass(s: s, n: "1", title: "Entorno de Software"),
         SizedBox(height: 10 * s),
 
-        _Bullet(
-          s: s,
-          textSpans: [
-            _b(s, "ctrlX PLC Engineering: "),
-            _n(s,
-                "Es el entorno basado en CODESYS (líder en software de control independiente del fabricante) adaptado por Rexroth con librerías específicas."),
-          ],
-        ),
-        SizedBox(height: 8 * s),
-        _Bullet(
-          s: s,
-          textSpans: [
-            _b(s, "Integración: "),
-            _n(s,
-                "Se accede a través de la caja de herramientas ctrlX WORKS, que permite configurar tanto hardware físico (ctrlX CORE) como instancias virtuales para pruebas."),
-          ],
-        ),
-
-        SizedBox(height: 16 * s),
-        Text("2.    Lenguajes Soportados (IEC 61131-3)", style: titleStyle),
-        SizedBox(height: 8 * s),
-
-        Text(
-          "El sistema permite el uso de los cinco lenguajes estándar de PLC:",
-          style: TextStyle(
-            fontSize: 15.8 * s,
-            height: 1.25,
-            fontWeight: FontWeight.w700,
-            color: const Color(0xFF0B1B2B).withOpacity(0.90),
+        Padding(
+          padding: EdgeInsets.only(left: indent),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _BulletGlass(
+                s: s,
+                textSpans: [
+                  _b(s, "ctrlX PLC Engineering: "),
+                  _n(
+                    s,
+                    "Es el entorno basado en CODESYS (líder en software de control independiente del fabricante) adaptado por Rexroth con librerías específicas.",
+                  ),
+                ],
+              ),
+              SizedBox(height: 10 * s),
+              _BulletGlass(
+                s: s,
+                textSpans: [
+                  _b(s, "Integración: "),
+                  _n(
+                    s,
+                    "Se accede a través de la caja de herramientas ctrlX WORKS, que permite configurar tanto hardware físico (ctrlX CORE) como instancias virtuales para pruebas.",
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
+
+        SizedBox(height: 20 * s), // 👈 más aire, para que no “pegue” con el 2.
+
+        _SectionTitleGlass(
+          s: s,
+          n: "2",
+          title: "Lenguajes Soportados (IEC 61131-3)",
+        ),
         SizedBox(height: 10 * s),
 
-        _Bullet(
-          s: s,
-          textSpans: [
-            _b(s, "Texto Estructurado (ST): "),
-            _n(s, "Incluye versiones extendidas como "),
-            _b(s, "ExST"),
-            _n(s, " (Extended Structured Text)."),
-          ],
+        Padding(
+          padding: EdgeInsets.only(left: indent),
+          child: _InnerGlassPanel(
+            s: s,
+            padding: EdgeInsets.fromLTRB(14 * s, 12 * s, 14 * s, 12 * s),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "El sistema permite el uso de los cinco lenguajes estándar de PLC:",
+                  style: TextStyle(
+                    fontSize: 15.8 * s,
+                    height: 1.25,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white.withOpacity(0.90),
+                  ),
+                ),
+                SizedBox(height: 10 * s),
+
+                _BulletGlass(
+                  s: s,
+                  dotOpacity: 0.82,
+                  textSpans: [
+                    _b(s, "Texto Estructurado (ST): "),
+                    _n(s, "Incluye versiones extendidas como "),
+                    _b(s, "ExST"),
+                    _n(s, " (Extended Structured Text)."),
+                  ],
+                ),
+                SizedBox(height: 8 * s),
+                _BulletGlass(
+                  s: s,
+                  textSpans: [_b(s, "Diagrama de Escalera (LD/Ladder).")],
+                ),
+                SizedBox(height: 8 * s),
+                _BulletGlass(
+                  s: s,
+                  textSpans: [_b(s, "Diagrama de Bloques de Funciones (FBD).")],
+                ),
+                SizedBox(height: 8 * s),
+                _BulletGlass(
+                  s: s,
+                  textSpans: [
+                    _b(s, "Diagrama de Funciones Secuenciales (SFC)."),
+                  ],
+                ),
+                SizedBox(height: 8 * s),
+                _BulletGlass(
+                  s: s,
+                  textSpans: [_b(s, "Lista de Instrucciones (IL).")],
+                ),
+              ],
+            ),
+          ),
         ),
-        SizedBox(height: 8 * s),
-        _Bullet(s: s, textSpans: [_b(s, "Diagrama de Escalera (LD/Ladder).")]),
-        SizedBox(height: 8 * s),
-        _Bullet(
-            s: s,
-            textSpans: [_b(s, "Diagrama de Bloques de Funciones (FBD).")]),
-        SizedBox(height: 8 * s),
-        _Bullet(
-            s: s,
-            textSpans: [_b(s, "Diagrama de Funciones Secuenciales (SFC).")]),
-        SizedBox(height: 8 * s),
-        _Bullet(s: s, textSpans: [_b(s, "Lista de Instrucciones (IL).")]),
       ],
     );
   }
@@ -303,7 +417,7 @@ class _LeftContent extends StatelessWidget {
           fontSize: 15.8 * s,
           height: 1.25,
           fontWeight: FontWeight.w900,
-          color: const Color(0xFF0B1B2B).withOpacity(0.94),
+          color: Colors.white.withOpacity(0.96),
         ),
       );
 
@@ -313,16 +427,102 @@ class _LeftContent extends StatelessWidget {
           fontSize: 15.8 * s,
           height: 1.25,
           fontWeight: FontWeight.w700,
-          color: const Color(0xFF0B1B2B).withOpacity(0.90),
+          color: Colors.white.withOpacity(0.90),
         ),
       );
 }
 
-class _Bullet extends StatelessWidget {
+class _SectionTitleGlass extends StatelessWidget {
+  final double s;
+  final String n;
+  final String title;
+
+  const _SectionTitleGlass({
+    required this.s,
+    required this.n,
+    required this.title,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final badge = 34 * s;
+
+    return Padding(
+      // 👈 este padding evita que quede demasiado pegado al borde del card
+      padding: EdgeInsets.only(left: 9 * s, top: 7 * s),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Badge “1 / 2” SIN sombra (porque se corta con ClipRRect)
+          Container(
+            width: badge,
+            height: badge,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12 * s),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.white.withOpacity(0.16),
+                  Colors.white.withOpacity(0.06),
+                  Colors.black.withOpacity(0.10),
+                ],
+              ),
+              border: Border.all(
+                color: Colors.white.withOpacity(0.18),
+                width: 1.2,
+              ),
+            ),
+            child: Text(
+              n,
+              style: TextStyle(
+                fontSize: 18.5 * s,
+                fontWeight: FontWeight.w900,
+                color: Colors.white.withOpacity(0.96),
+              ),
+            ),
+          ),
+          SizedBox(width: 12 * s),
+
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(top: 4 * s),
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 20 * s,
+                  fontWeight: FontWeight.w900,
+                  height: 1.15,
+                  color: Colors.white.withOpacity(0.96),
+                  shadows: [
+                    Shadow(
+                      blurRadius: 14,
+                      offset: const Offset(0, 8),
+                      color: Colors.black.withOpacity(0.18),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+class _BulletGlass extends StatelessWidget {
   final double s;
   final List<TextSpan> textSpans;
+  final double dotOpacity;
 
-  const _Bullet({required this.s, required this.textSpans});
+  const _BulletGlass({
+    required this.s,
+    required this.textSpans,
+    this.dotOpacity = 0.80,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -336,27 +536,32 @@ class _Bullet extends StatelessWidget {
             height: 6.5 * s,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: const Color(0xFF0B1B2B).withOpacity(0.90),
+              color: const Color(0xFF2EC4FF).withOpacity(dotOpacity),
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: 10,
+                  offset: const Offset(0, 6),
+                  color: Colors.black.withOpacity(0.18),
+                )
+              ],
             ),
           ),
         ),
         SizedBox(width: 10 * s),
-        Expanded(
-          child: RichText(text: TextSpan(children: textSpans)),
-        ),
+        Expanded(child: RichText(text: TextSpan(children: textSpans))),
       ],
     );
   }
 }
 
-// ===================== RIGHT IMAGE PANE =====================
+// ===================== RIGHT IMAGE PANE (GLASS) =====================
 
-class _ImagePane extends StatelessWidget {
+class _ImagePaneGlass extends StatelessWidget {
   final double s;
   final String asset;
   final double radius;
 
-  const _ImagePane({
+  const _ImagePaneGlass({
     required this.s,
     required this.asset,
     this.radius = 18,
@@ -371,20 +576,20 @@ class _ImagePane extends StatelessWidget {
       child: Stack(
         children: [
           Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.04),
-              ),
+            child: ImageFiltered(
+              imageFilter: ImageFilter.blur(sigmaX: 16 * s, sigmaY: 16 * s),
+              child: Container(color: Colors.white.withOpacity(0.06)),
             ),
           ),
           Positioned.fill(
-            child: _FitImageToCard(
+            child: _FitImageToCardGlass(
               s: s,
               asset: asset,
               topInset: 8 * s,
               sideInset: 8 * s,
               bottomInset: 8 * s,
-              blurOpacity: 0.08,
+              blurOpacity: 0.10,
+              overlayOpacity: 0.04,
             ),
           ),
           Positioned.fill(
@@ -392,8 +597,8 @@ class _ImagePane extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(r),
                 border: Border.all(
-                  color: const Color(0xFF59D7FF).withOpacity(0.62),
-                  width: 2.0,
+                  color: Colors.white.withOpacity(0.14),
+                  width: 1.6,
                 ),
               ),
             ),
@@ -404,44 +609,15 @@ class _ImagePane extends StatelessWidget {
   }
 }
 
-// ===================== TITLE =====================
+// ===================== GLASS CARD =====================
 
-class _TopHeadline extends StatelessWidget {
-  final double s;
-  final String title;
-  const _TopHeadline({required this.s, required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: TextStyle(
-        fontSize: 52 * s,
-        height: 1.0,
-        fontWeight: FontWeight.w900,
-        letterSpacing: 0.2,
-        color: Colors.white.withOpacity(0.96),
-        shadows: [
-          Shadow(
-            blurRadius: 22,
-            offset: const Offset(0, 10),
-            color: Colors.black.withOpacity(0.45),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ===================== WHITE CARD =====================
-
-class _WhiteCard extends StatelessWidget {
+class _GlassCard extends StatelessWidget {
   final double s;
   final Widget child;
   final double radius;
   final EdgeInsetsGeometry padding;
 
-  const _WhiteCard({
+  const _GlassCard({
     required this.s,
     required this.child,
     this.radius = 26,
@@ -455,23 +631,77 @@ class _WhiteCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(r),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+        filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
         child: Container(
           padding: padding,
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.92),
+            color: Colors.white.withOpacity(0.08),
             borderRadius: BorderRadius.circular(r),
             border: Border.all(
-              color: const Color(0xFF59D7FF).withOpacity(0.75),
-              width: 2.4,
+              color: Colors.white.withOpacity(0.14),
+              width: 1.8,
             ),
             boxShadow: [
               BoxShadow(
                 blurRadius: 28,
                 offset: const Offset(0, 16),
-                color: Colors.black.withOpacity(0.28),
+                color: Colors.black.withOpacity(0.32),
               ),
             ],
+          ),
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(r),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Colors.white.withOpacity(0.10),
+                        Colors.transparent,
+                        Colors.black.withOpacity(0.08),
+                      ],
+                      stops: const [0.0, 0.55, 1.0],
+                    ),
+                  ),
+                ),
+              ),
+              child,
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ===================== INNER GLASS PANEL =====================
+
+class _InnerGlassPanel extends StatelessWidget {
+  final double s;
+  final Widget child;
+  final EdgeInsetsGeometry padding;
+
+  const _InnerGlassPanel({
+    required this.s,
+    required this.child,
+    this.padding = EdgeInsets.zero,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(22 * s),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+        child: Container(
+          padding: padding,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(22 * s),
+            color: Colors.white.withOpacity(0.06),
+            border: Border.all(color: Colors.white.withOpacity(0.10)),
           ),
           child: child,
         ),
@@ -480,28 +710,30 @@ class _WhiteCard extends StatelessWidget {
   }
 }
 
-// ===================== IMAGE FIT =====================
+// ===================== IMAGE FIT (GLASS) =====================
 
-class _FitImageToCard extends StatelessWidget {
+class _FitImageToCardGlass extends StatelessWidget {
   final double s;
   final String asset;
   final double topInset;
   final double sideInset;
   final double bottomInset;
   final double blurOpacity;
+  final double overlayOpacity;
 
-  const _FitImageToCard({
+  const _FitImageToCardGlass({
     required this.s,
     required this.asset,
     this.topInset = 10,
     this.sideInset = 10,
     this.bottomInset = 10,
     this.blurOpacity = 0.10,
+    this.overlayOpacity = 0.04,
   });
 
   @override
   Widget build(BuildContext context) {
-    Widget fallback() => _ImageFallback(s: s);
+    Widget fallback() => _ImageFallbackGlass(s: s);
 
     return Stack(
       children: [
@@ -519,7 +751,9 @@ class _FitImageToCard extends StatelessWidget {
             ),
           ),
         ),
-        Positioned.fill(child: Container(color: Colors.black.withOpacity(0.02))),
+        Positioned.fill(
+          child: Container(color: Colors.black.withOpacity(overlayOpacity)),
+        ),
         Positioned.fill(
           child: Padding(
             padding: EdgeInsets.fromLTRB(
@@ -542,17 +776,20 @@ class _FitImageToCard extends StatelessWidget {
   }
 }
 
-class _ImageFallback extends StatelessWidget {
+class _ImageFallbackGlass extends StatelessWidget {
   final double s;
-  const _ImageFallback({required this.s});
+  const _ImageFallbackGlass({required this.s});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black.withOpacity(0.06),
+      color: Colors.white.withOpacity(0.04),
       child: Center(
-        child: Icon(Icons.image_rounded,
-            size: 54 * s, color: Colors.black.withOpacity(0.45)),
+        child: Icon(
+          Icons.image_rounded,
+          size: 54 * s,
+          color: Colors.white.withOpacity(0.70),
+        ),
       ),
     );
   }
@@ -570,6 +807,22 @@ class _BackgroundImage extends StatelessWidget {
     return Stack(
       children: [
         Positioned.fill(child: Image.asset(asset, fit: BoxFit.cover)),
+
+        Positioned.fill(
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [
+                  const Color(0xFF2EC4FF).withOpacity(0.14),
+                  Colors.black.withOpacity(0.28),
+                  const Color(0xFFFF2B2B).withOpacity(0.12),
+                ],
+              ),
+            ),
+          ),
+        ),
         Positioned.fill(
           child: Container(
             decoration: BoxDecoration(
@@ -577,27 +830,14 @@ class _BackgroundImage extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.black.withOpacity(0.18),
-                  Colors.black.withOpacity(0.62),
+                  Colors.black.withOpacity(0.16),
+                  Colors.black.withOpacity(0.60),
                 ],
               ),
             ),
           ),
         ),
-        Positioned.fill(
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: RadialGradient(
-                center: const Alignment(0.0, -0.25),
-                radius: 1.20,
-                colors: [
-                  Colors.transparent,
-                  Colors.black.withOpacity(0.45),
-                ],
-              ),
-            ),
-          ),
-        ),
+
         Positioned.fill(
           child: IgnorePointer(
             child: Opacity(

@@ -83,8 +83,8 @@ class _Slide13State extends State<Slide13> with SingleTickerProviderStateMixin {
 
     // ===== Cambia assets aquí =====
     const bgAsset = "assets/slide1/fondoslide1.jpeg";
-    const imgLeftTop = "assets/slide13/slide13_1.jpeg";   // imagen grande 1
-    const imgRightBig = "assets/slide13/slide13_2.jpeg";  // imagen grande 2
+    const imgLeftTop = "assets/slide13/slide13_1.jpeg"; // imagen grande 1
+    const imgRightBig = "assets/slide13/slide13_2.jpeg"; // imagen grande 2
 
     return Scaffold(
       body: Stack(
@@ -103,7 +103,10 @@ class _Slide13State extends State<Slide13> with SingleTickerProviderStateMixin {
                     children: [
                       SlideTransition(
                         position: _titleIn,
-                        child: _TopHeadline(s: s, title: "Built in Security"),
+                        child: _HeaderGlass(
+                          scale: s,
+                          title: "Built in Security",
+                        ),
                       ),
                       SizedBox(height: 18 * s),
 
@@ -143,7 +146,7 @@ class _Slide13State extends State<Slide13> with SingleTickerProviderStateMixin {
                                                   ),
                                                 ),
                                               ),
-                                              // borde suave adentro
+                                              // borde suave adentro (más sutil)
                                               Positioned.fill(
                                                 child: DecoratedBox(
                                                   decoration: BoxDecoration(
@@ -151,10 +154,28 @@ class _Slide13State extends State<Slide13> with SingleTickerProviderStateMixin {
                                                         BorderRadius.circular(
                                                             28 * s),
                                                     border: Border.all(
-                                                      color: const Color(
-                                                              0xFF59D7FF)
-                                                          .withOpacity(0.45),
-                                                      width: 2.0,
+                                                      color: Colors.white
+                                                          .withOpacity(0.12),
+                                                      width: 1.6,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              // brillo leve
+                                              Positioned.fill(
+                                                child: DecoratedBox(
+                                                  decoration: BoxDecoration(
+                                                    gradient: LinearGradient(
+                                                      begin: Alignment.topLeft,
+                                                      end: Alignment.bottomRight,
+                                                      colors: [
+                                                        Colors.white
+                                                            .withOpacity(0.10),
+                                                        Colors.transparent,
+                                                        Colors.black
+                                                            .withOpacity(0.12),
+                                                      ],
+                                                      stops: const [0.0, 0.55, 1.0],
                                                     ),
                                                   ),
                                                 ),
@@ -176,7 +197,7 @@ class _Slide13State extends State<Slide13> with SingleTickerProviderStateMixin {
                                             child: Row(
                                               children: [
                                                 Expanded(
-                                                  child: _SmallPill(
+                                                  child: _TitlePill(
                                                     s: s,
                                                     text:
                                                         "1.- Defensa en\nProfundidad",
@@ -185,7 +206,7 @@ class _Slide13State extends State<Slide13> with SingleTickerProviderStateMixin {
                                                 ),
                                                 SizedBox(width: 14 * s),
                                                 Expanded(
-                                                  child: _SmallPill(
+                                                  child: _TitlePill(
                                                     s: s,
                                                     text:
                                                         "Capa 2:\nAislamiento\n(Sandbox)",
@@ -196,7 +217,7 @@ class _Slide13State extends State<Slide13> with SingleTickerProviderStateMixin {
                                           ),
                                           SizedBox(height: 14 * s),
                                           Expanded(
-                                            child: _SmallPill(
+                                            child: _TitlePill(
                                               s: s,
                                               text:
                                                   "Capa 1: Hardware y\nSistema Operativo Base",
@@ -256,10 +277,27 @@ class _Slide13State extends State<Slide13> with SingleTickerProviderStateMixin {
                                                         BorderRadius.circular(
                                                             30 * s),
                                                     border: Border.all(
-                                                      color: const Color(
-                                                              0xFF59D7FF)
-                                                          .withOpacity(0.45),
-                                                      width: 2.0,
+                                                      color: Colors.white
+                                                          .withOpacity(0.12),
+                                                      width: 1.6,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Positioned.fill(
+                                                child: DecoratedBox(
+                                                  decoration: BoxDecoration(
+                                                    gradient: LinearGradient(
+                                                      begin: Alignment.topLeft,
+                                                      end: Alignment.bottomRight,
+                                                      colors: [
+                                                        Colors.white
+                                                            .withOpacity(0.10),
+                                                        Colors.transparent,
+                                                        Colors.black
+                                                            .withOpacity(0.10),
+                                                      ],
+                                                      stops: const [0.0, 0.55, 1.0],
                                                     ),
                                                   ),
                                                 ),
@@ -299,29 +337,64 @@ class _Slide13State extends State<Slide13> with SingleTickerProviderStateMixin {
   }
 }
 
-// ===================== TOP HEADLINE =====================
+// ===================== HEADER GLASS (estilo Slide07) =====================
 
-class _TopHeadline extends StatelessWidget {
-  final double s;
+class _HeaderGlass extends StatelessWidget {
+  final double scale;
   final String title;
 
-  const _TopHeadline({required this.s, required this.title});
+  const _HeaderGlass({required this.scale, required this.title});
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: TextStyle(
-        fontSize: 54 * s,
-        height: 1.0,
-        fontWeight: FontWeight.w900,
-        letterSpacing: 0.2,
-        color: Colors.white.withOpacity(0.95),
-        shadows: [
-          Shadow(
-            blurRadius: 22,
-            offset: const Offset(0, 10),
-            color: Colors.black.withOpacity(0.45),
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: 26 * scale,
+        vertical: 18 * scale,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(18 * scale),
+        color: Colors.white.withOpacity(0.10),
+        border: Border.all(color: Colors.white.withOpacity(0.14)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.30),
+            blurRadius: 26 * scale,
+            offset: Offset(0, 12 * scale),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 10 * scale,
+            height: 34 * scale,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(99),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  const Color(0xFF2EC4FF).withOpacity(0.95),
+                  const Color(0xFFFF2B2B).withOpacity(0.85),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(width: 14 * scale),
+          Expanded(
+            child: Text(
+              title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 54 * scale,
+                fontWeight: FontWeight.w900,
+                color: Colors.white,
+                letterSpacing: 0.2,
+                height: 1.0,
+              ),
+            ),
           ),
         ],
       ),
@@ -339,26 +412,48 @@ class _TopPillsRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(child: _SmallPill(s: s, text: "Capa 3:\nSeguridad de Red\n& Comunicaciones")),
+        Expanded(
+          child: _TitlePill(
+            s: s,
+            text: "Capa 3:\nSeguridad de Red\n& Comunicaciones",
+          ),
+        ),
         SizedBox(width: 12 * s),
-        Expanded(child: _SmallPill(s: s, text: "Capa 4:\nGestión de Usuarios\n(RBAC)")),
+        Expanded(
+          child: _TitlePill(
+            s: s,
+            text: "Capa 4:\nGestión de Usuarios\n(RBAC)",
+          ),
+        ),
         SizedBox(width: 12 * s),
-        Expanded(child: _SmallPill(s: s, text: "2.- Secure by\nDesign", strong: true)),
+        Expanded(
+          child: _TitlePill(
+            s: s,
+            text: "2.- Secure by\nDesign",
+            strong: true,
+          ),
+        ),
         SizedBox(width: 12 * s),
-        Expanded(child: _SmallPill(s: s, text: "3.- IEC 62443\nSL3", strong: true)),
+        Expanded(
+          child: _TitlePill(
+            s: s,
+            text: "3.- IEC 62443\nSL3",
+            strong: true,
+          ),
+        ),
       ],
     );
   }
 }
 
-// ===================== SMALL PILL =====================
+// ===================== TITLE PILL (glass oscuro estilo Slide07) =====================
 
-class _SmallPill extends StatelessWidget {
+class _TitlePill extends StatelessWidget {
   final double s;
   final String text;
   final bool strong;
 
-  const _SmallPill({
+  const _TitlePill({
     required this.s,
     required this.text,
     this.strong = false,
@@ -371,15 +466,15 @@ class _SmallPill extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(radius),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+        filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 14 * s, vertical: 12 * s),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.92),
             borderRadius: BorderRadius.circular(radius),
+            color: Colors.white.withOpacity(0.08),
             border: Border.all(
-              color: const Color(0xFF59D7FF).withOpacity(0.85),
-              width: 2.0,
+              color: Colors.white.withOpacity(strong ? 0.18 : 0.14),
+              width: 1.6,
             ),
             boxShadow: [
               BoxShadow(
@@ -389,19 +484,42 @@ class _SmallPill extends StatelessWidget {
               ),
             ],
           ),
-          child: Center(
-            child: Text(
-              text,
-              textAlign: TextAlign.center,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 14.5 * s,
-                height: 1.15,
-                fontWeight: strong ? FontWeight.w900 : FontWeight.w700,
-                color: Colors.black.withOpacity(0.88),
+          child: Stack(
+            children: [
+              // overlay gradiente suave cyan->red como en Slide07
+              Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(radius),
+                    gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [
+                        const Color(0xFF2EC4FF).withOpacity(0.22),
+                        Colors.white.withOpacity(0.06),
+                        const Color(0xFFFF2B2B).withOpacity(0.18),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-            ),
+              // contenido
+              Center(
+                child: Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 14.5 * s,
+                    height: 1.15,
+                    fontWeight: strong ? FontWeight.w900 : FontWeight.w800,
+                    color: Colors.white.withOpacity(0.95),
+                    letterSpacing: 0.1,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -409,7 +527,7 @@ class _SmallPill extends StatelessWidget {
   }
 }
 
-// ===================== GLASS CARD =====================
+// ===================== GLASS CARD (unificado con Slide07) =====================
 
 class _GlassCard extends StatelessWidget {
   final double s;
@@ -431,19 +549,19 @@ class _GlassCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(r),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+        filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
         child: Container(
           padding: padding,
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.07),
+            color: Colors.white.withOpacity(0.08),
             borderRadius: BorderRadius.circular(r),
             border: Border.all(
-              color: const Color(0xFF59D7FF).withOpacity(0.35),
+              color: Colors.white.withOpacity(0.14),
               width: 1.8,
             ),
             boxShadow: [
               BoxShadow(
-                blurRadius: 28,
+                blurRadius: 26,
                 offset: const Offset(0, 16),
                 color: Colors.black.withOpacity(0.32),
               ),
@@ -451,6 +569,7 @@ class _GlassCard extends StatelessWidget {
           ),
           child: Stack(
             children: [
+              // overlay leve, sin matar la imagen
               Positioned.fill(
                 child: DecoratedBox(
                   decoration: BoxDecoration(
@@ -533,6 +652,23 @@ class _BackgroundImage extends StatelessWidget {
             alignment: Alignment.center,
           ),
         ),
+
+        // overlay cinematic (igual onda Slide07)
+        Positioned.fill(
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [
+                  const Color(0xFF2EC4FF).withOpacity(0.14),
+                  Colors.black.withOpacity(0.28),
+                  const Color(0xFFFF2B2B).withOpacity(0.12),
+                ],
+              ),
+            ),
+          ),
+        ),
         Positioned.fill(
           child: Container(
             decoration: BoxDecoration(
@@ -540,27 +676,15 @@ class _BackgroundImage extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.black.withOpacity(0.20),
-                  Colors.black.withOpacity(0.60),
+                  Colors.black.withOpacity(0.18),
+                  Colors.black.withOpacity(0.48),
                 ],
               ),
             ),
           ),
         ),
-        Positioned.fill(
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: RadialGradient(
-                center: const Alignment(0.0, -0.2),
-                radius: 1.2,
-                colors: [
-                  Colors.transparent,
-                  Colors.black.withOpacity(0.45),
-                ],
-              ),
-            ),
-          ),
-        ),
+
+        // grid
         Positioned.fill(
           child: IgnorePointer(
             child: Opacity(

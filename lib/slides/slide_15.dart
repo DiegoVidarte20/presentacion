@@ -282,25 +282,71 @@ class _TopHeadline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: TextStyle(
-        fontSize: 56 * s,
-        height: 1.0,
-        fontWeight: FontWeight.w900,
-        letterSpacing: 0.2,
-        color: Colors.white.withOpacity(0.96),
-        shadows: [
-          Shadow(
-            blurRadius: 22,
-            offset: const Offset(0, 10),
-            color: Colors.black.withOpacity(0.45),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(18 * s),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 22 * s, vertical: 14 * s),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(18 * s),
+            color: Colors.white.withOpacity(0.10),
+            border: Border.all(color: Colors.white.withOpacity(0.14), width: 1.6),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.30),
+                blurRadius: 26 * s,
+                offset: Offset(0, 12 * s),
+              ),
+            ],
           ),
-        ],
+          child: Row(
+            children: [
+              Container(
+                width: 10 * s,
+                height: 34 * s,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(99),
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      const Color(0xFF2EC4FF).withOpacity(0.95),
+                      const Color(0xFFFF2B2B).withOpacity(0.85),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(width: 14 * s),
+              Expanded(
+                child: Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 56 * s,
+                    height: 1.0,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 0.2,
+                    color: Colors.white.withOpacity(0.96),
+                    shadows: [
+                      Shadow(
+                        blurRadius: 22,
+                        offset: const Offset(0, 10),
+                        color: Colors.black.withOpacity(0.35),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 }
+
 
 // ===================== BULLET COLUMN =====================
 

@@ -1,22 +1,23 @@
-// lib/slides/slide_18.dart
+// lib/slides/slide_21.dart
 import 'dart:ui' show ImageFilter;
 import 'package:flutter/material.dart';
 import 'package:presentacion/ui/footer_band.dart';
 
-class Slide18 extends StatefulWidget {
-  const Slide18({super.key});
+class Slide21 extends StatefulWidget {
+  const Slide21({super.key});
 
   @override
-  State<Slide18> createState() => _Slide18State();
+  State<Slide21> createState() => _Slide21State();
 }
 
-class _Slide18State extends State<Slide18> with SingleTickerProviderStateMixin {
+class _Slide21State extends State<Slide21> with SingleTickerProviderStateMixin {
   late final AnimationController _c;
   late final Animation<double> _fade;
   late final Animation<double> _scale;
   late final Animation<Offset> _titleIn;
   late final Animation<Offset> _leftIn;
-  late final Animation<Offset> _rightIn;
+  late final Animation<Offset> _rtIn;
+  late final Animation<Offset> _rbIn;
 
   @override
   void initState() {
@@ -24,7 +25,7 @@ class _Slide18State extends State<Slide18> with SingleTickerProviderStateMixin {
 
     _c = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1150),
+      duration: const Duration(milliseconds: 1180),
     );
 
     _fade = CurvedAnimation(
@@ -39,29 +40,37 @@ class _Slide18State extends State<Slide18> with SingleTickerProviderStateMixin {
       ),
     );
 
-    _titleIn =
-        Tween<Offset>(begin: const Offset(0, -0.10), end: Offset.zero).animate(
-      CurvedAnimation(
-        parent: _c,
-        curve: const Interval(0.00, 0.45, curve: Curves.easeOutCubic),
-      ),
-    );
+    _titleIn = Tween<Offset>(begin: const Offset(0, -0.10), end: Offset.zero)
+        .animate(
+          CurvedAnimation(
+            parent: _c,
+            curve: const Interval(0.00, 0.45, curve: Curves.easeOutCubic),
+          ),
+        );
 
     _leftIn = Tween<Offset>(begin: const Offset(-0.06, 0.04), end: Offset.zero)
         .animate(
-      CurvedAnimation(
-        parent: _c,
-        curve: const Interval(0.12, 0.85, curve: Curves.easeOutCubic),
-      ),
-    );
+          CurvedAnimation(
+            parent: _c,
+            curve: const Interval(0.12, 0.92, curve: Curves.easeOutCubic),
+          ),
+        );
 
-    _rightIn = Tween<Offset>(begin: const Offset(0.06, 0.04), end: Offset.zero)
+    _rtIn = Tween<Offset>(begin: const Offset(0.06, 0.03), end: Offset.zero)
         .animate(
-      CurvedAnimation(
-        parent: _c,
-        curve: const Interval(0.14, 0.92, curve: Curves.easeOutCubic),
-      ),
-    );
+          CurvedAnimation(
+            parent: _c,
+            curve: const Interval(0.16, 0.90, curve: Curves.easeOutCubic),
+          ),
+        );
+
+    _rbIn = Tween<Offset>(begin: const Offset(0.06, 0.05), end: Offset.zero)
+        .animate(
+          CurvedAnimation(
+            parent: _c,
+            curve: const Interval(0.22, 0.98, curve: Curves.easeOutCubic),
+          ),
+        );
 
     _c.forward();
   }
@@ -82,7 +91,10 @@ class _Slide18State extends State<Slide18> with SingleTickerProviderStateMixin {
     final s = _scaleByWidth(context);
 
     const bgAsset = "assets/slide1/fondoslide1.jpeg";
-    const rightImage = "assets/slide18/slide18.jpg"; // 👈 tu imagen derecha
+
+    // ✅ Cambia estos paths a tus imágenes reales
+    const imgTop = "assets/slide21/slide21_1.png";
+    const imgBottom = "assets/slide21/slide21_2.png";
 
     return Scaffold(
       body: Stack(
@@ -101,7 +113,10 @@ class _Slide18State extends State<Slide18> with SingleTickerProviderStateMixin {
                     children: [
                       SlideTransition(
                         position: _titleIn,
-                        child: _HeaderGlass(scale: s, title: "Programación IEC y NO-IEC"),
+                        child: _HeaderGlass(
+                          scale: s,
+                          title: "Runtime and Engineering – ctrlX WORKS",
+                        ),
                       ),
                       SizedBox(height: 14 * s),
 
@@ -109,69 +124,64 @@ class _Slide18State extends State<Slide18> with SingleTickerProviderStateMixin {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            // ===== LEFT (glass) =====
+                            // ================= LEFT GLASS (TEXT) =================
                             Expanded(
-                              flex: 36,
+                              flex: 44,
                               child: SlideTransition(
                                 position: _leftIn,
                                 child: _GlassCard(
                                   s: s,
-                                  radius: 30,
+                                  radius: 32,
                                   padding: EdgeInsets.fromLTRB(
                                     18 * s,
                                     16 * s,
+                                    18 * s,
                                     16 * s,
-                                    14 * s,
                                   ),
-                                  child: _InnerGlassPanel(
-                                    s: s,
-                                    child: _LeftContentLight(s: s),
-                                  ),
+                                  child: _LeftContentGlass(s: s),
                                 ),
                               ),
                             ),
 
                             SizedBox(width: 18 * s),
 
-                            // ===== RIGHT (glass image) =====
+                            // ================= RIGHT (2 IMAGES) =================
                             Expanded(
-                              flex: 64,
-                              child: SlideTransition(
-                                position: _rightIn,
-                                child: _GlassCard(
-                                  s: s,
-                                  radius: 34,
-                                  padding: EdgeInsets.zero,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(34 * s),
-                                    child: Stack(
-                                      children: [
-                                        Positioned.fill(
-                                          child: _FitImageToCard(
-                                            s: s,
-                                            asset: rightImage,
-                                            topInset: 10 * s,
-                                            sideInset: 10 * s,
-                                            bottomInset: 10 * s,
-                                          ),
+                              flex: 56,
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    child: SlideTransition(
+                                      position: _rtIn,
+                                      child: _GlassCard(
+                                        s: s,
+                                        radius: 34,
+                                        padding: EdgeInsets.zero,
+                                        child: _LabeledImageGlass(
+                                          s: s,
+                                          asset: imgTop,
+                                          label: "Herramientas Modulares",
                                         ),
-                                        // borde interno suave
-                                        Positioned.fill(
-                                          child: DecoratedBox(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(34 * s),
-                                              border: Border.all(
-                                                color: Colors.white.withOpacity(0.14),
-                                                width: 1.6,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                      ),
                                     ),
                                   ),
-                                ),
+                                  SizedBox(height: 14 * s),
+                                  Expanded(
+                                    child: SlideTransition(
+                                      position: _rbIn,
+                                      child: _GlassCard(
+                                        s: s,
+                                        radius: 34,
+                                        padding: EdgeInsets.zero,
+                                        child: _LabeledImageGlass(
+                                          s: s,
+                                          asset: imgBottom,
+                                          label: "ctrlX CORE Virtual",
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
@@ -222,7 +232,10 @@ class _HeaderGlass extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18 * scale),
             color: Colors.white.withOpacity(0.10),
-            border: Border.all(color: Colors.white.withOpacity(0.14), width: 1.6),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.14),
+              width: 1.6,
+            ),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.30),
@@ -278,74 +291,132 @@ class _HeaderGlass extends StatelessWidget {
   }
 }
 
-// ===================== LEFT CONTENT (WHITE TEXT) =====================
+// ===================== LEFT CONTENT (GLASS) =====================
 
-class _LeftContentLight extends StatelessWidget {
+class _LeftContentGlass extends StatelessWidget {
   final double s;
-  const _LeftContentLight({required this.s});
+  const _LeftContentGlass({required this.s});
 
   @override
   Widget build(BuildContext context) {
+    final hStyle = TextStyle(
+      fontSize: 22 * s,
+      fontWeight: FontWeight.w900,
+      height: 1.10,
+      color: Colors.white.withOpacity(0.96),
+      shadows: [
+        Shadow(
+          blurRadius: 18,
+          offset: const Offset(0, 10),
+          color: Colors.black.withOpacity(0.18),
+        ),
+      ],
+    );
+
+    final base = TextStyle(
+      fontSize: 16.4 * s,
+      height: 1.28,
+      fontWeight: FontWeight.w700,
+      color: Colors.white.withOpacity(0.90),
+    );
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Center(
-          child: Text(
-            "ctrlX sin IEC (Programación\nModerna / IT)",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 22 * s,
-              fontWeight: FontWeight.w900,
-              height: 1.12,
-              color: Colors.white.withOpacity(0.96),
+        Padding(
+          padding: EdgeInsets.only(left: 6 * s, top: 6 * s, bottom: 2 * s),
+          child: _GlassLabelPill(s: s, text: "ctrlX WORKS"),
+        ),
+
+        SizedBox(height: 10 * s),
+
+        _InnerGlassPanel(
+          s: s,
+          padding: EdgeInsets.fromLTRB(14 * s, 12 * s, 14 * s, 12 * s),
+          child: RichText(
+            text: TextSpan(
+              style: base,
+              children: [
+                TextSpan(
+                  text: "ctrlX WORKS",
+                  style: base.copyWith(fontWeight: FontWeight.w900),
+                ),
+                const TextSpan(text: ", entorno de ingeniería para la "),
+                TextSpan(
+                  text: "configuración y programación",
+                  style: base.copyWith(fontWeight: FontWeight.w900),
+                ),
+                const TextSpan(text: " de "),
+                TextSpan(
+                  text: "ctrlX OS",
+                  style: base.copyWith(fontWeight: FontWeight.w900),
+                ),
+                const TextSpan(
+                  text:
+                      ". Puedes probar la plataforma con numerosas aplicaciones de forma gratuita gracias al sistema de control virtual ",
+                ),
+                TextSpan(
+                  text: "ctrlX CORE virtual",
+                  style: base.copyWith(fontWeight: FontWeight.w900),
+                ),
+                const TextSpan(text: "."),
+              ],
             ),
           ),
         ),
-        SizedBox(height: 14 * s),
 
-        Text(
-          "Ventajas:",
-          style: TextStyle(
-            fontSize: 18 * s,
-            fontWeight: FontWeight.w900,
-            color: Colors.white.withOpacity(0.94),
-          ),
-        ),
-        SizedBox(height: 8 * s),
+        SizedBox(height: 12 * s),
 
-        _BulletRichLight(
-          s: s,
-          head: "Flexibilidad total:",
-          body:
-              " Uso de software de código abierto y bibliotecas externas (ej. OpenCV para visión o TensorFlow para IA).",
-        ),
-        SizedBox(height: 8 * s),
-        _BulletRichLight(
-          s: s,
-          head: "Ingeniería web:",
-          body:
-              " Programación mediante Visual Coding (basado en bloques) o Textual Coding directamente desde el navegador.",
-        ),
-
-        SizedBox(height: 16 * s),
-
-        Text(
-          "Comunicación:",
-          style: TextStyle(
-            fontSize: 18 * s,
-            fontWeight: FontWeight.w900,
-            color: Colors.white.withOpacity(0.94),
-          ),
-        ),
-        SizedBox(height: 8 * s),
-
-        Text(
-          "Todo se integra mediante el ctrlX Data Layer, lo que permite que una app en Python interactúe con el hardware sin pasar por un programa IEC.",
-          style: TextStyle(
-            fontSize: 16.8 * s,
-            height: 1.26,
-            fontWeight: FontWeight.w700,
-            color: Colors.white.withOpacity(0.90),
+        Expanded(
+          child: _InnerGlassPanel(
+            s: s,
+            padding: EdgeInsets.fromLTRB(14 * s, 12 * s, 14 * s, 12 * s),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _BulletRichGlass(
+                  s: s,
+                  head: "Ingeniería simplificada:",
+                  body:
+                      " Reduce costos y esfuerzo en el desarrollo de soluciones de automatización.",
+                ),
+                SizedBox(height: 10 * s),
+                _BulletRichGlass(
+                  s: s,
+                  head: "Herramientas modulares:",
+                  body:
+                      " Incluye componentes para PLC (IEC 61131), configuración de E/S (ctrlX I/O), seguridad (ctrlX SAFETY) y drives (ctrlX DRIVE).",
+                ),
+                SizedBox(height: 10 * s),
+                _BulletRichGlass(
+                  s: s,
+                  head: "Flexibilidad:",
+                  body:
+                      " Permite desarrollar aplicaciones en diversos lenguajes de programación.",
+                ),
+                SizedBox(height: 10 * s),
+                _BulletRichGlass(
+                  s: s,
+                  head: "ctrlX CORE virtual:",
+                  body:
+                      " Un simulador que emula el control ctrlX CORE en un PC, permitiendo puesta en marcha virtual y pruebas de software.",
+                ),
+                SizedBox(height: 10 * s),
+                _BulletRichGlass(
+                  s: s,
+                  head: "App Store y comunidad:",
+                  body:
+                      " Facilita el acceso a más herramientas y soporte a través de la tienda y la comunidad de Bosch Rexroth.",
+                ),
+                SizedBox(height: 10 * s),
+                _BulletRichGlass(
+                  s: s,
+                  head: "Gestión de dispositivos:",
+                  body:
+                      " Detecta y configura dispositivos ctrlX CORE en la red de forma automática.",
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -353,12 +424,12 @@ class _LeftContentLight extends StatelessWidget {
   }
 }
 
-class _BulletRichLight extends StatelessWidget {
+class _BulletRichGlass extends StatelessWidget {
   final double s;
   final String head;
   final String body;
 
-  const _BulletRichLight({
+  const _BulletRichGlass({
     required this.s,
     required this.head,
     required this.body,
@@ -366,7 +437,7 @@ class _BulletRichLight extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textColor = Colors.white.withOpacity(0.90);
+    final textColor = Colors.white.withOpacity(0.92);
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -374,17 +445,17 @@ class _BulletRichLight extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(top: 7 * s),
           child: Container(
-            width: 7 * s,
-            height: 7 * s,
+            width: 6.5 * s,
+            height: 6.5 * s,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: const Color(0xFF2EC4FF).withOpacity(0.80),
+              color: const Color(0xFF2EC4FF).withOpacity(0.82),
               boxShadow: [
                 BoxShadow(
                   blurRadius: 10,
                   offset: const Offset(0, 6),
                   color: Colors.black.withOpacity(0.18),
-                )
+                ),
               ],
             ),
           ),
@@ -394,8 +465,8 @@ class _BulletRichLight extends StatelessWidget {
           child: RichText(
             text: TextSpan(
               style: TextStyle(
-                fontSize: 16.8 * s,
-                height: 1.24,
+                fontSize: 16.2 * s,
+                height: 1.26,
                 fontWeight: FontWeight.w700,
                 color: textColor,
               ),
@@ -413,6 +484,116 @@ class _BulletRichLight extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+// ===================== LABELED IMAGE GLASS =====================
+
+class _LabeledImageGlass extends StatelessWidget {
+  final double s;
+  final String asset;
+  final String label;
+
+  const _LabeledImageGlass({
+    required this.s,
+    required this.asset,
+    required this.label,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(34 * s),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: _FitImageToCardGlass(
+              s: s,
+              asset: asset,
+              topInset: 10 * s,
+              sideInset: 10 * s,
+              bottomInset: 10 * s,
+              blurOpacity: 0.12,
+              overlayOpacity: 0.05,
+            ),
+          ),
+
+          // label glass (abajo-centro, como en tu referencia)
+          Positioned(
+            left: 14 * s,
+            right: 14 * s,
+            bottom: 14 * s,
+            child: _GlassLabelPill(s: s, text: label),
+          ),
+
+          // borde suave
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(34 * s),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.14),
+                  width: 1.6,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _GlassLabelPill extends StatelessWidget {
+  final double s;
+  final String text;
+
+  const _GlassLabelPill({required this.s, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(18 * s),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 16 * s, vertical: 10 * s),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(18 * s),
+            color: Colors.white.withOpacity(0.10),
+            border: Border.all(color: Colors.white.withOpacity(0.14)),
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [
+                const Color(0xFF2EC4FF).withOpacity(0.10),
+                Colors.white.withOpacity(0.08),
+                const Color(0xFFFF2B2B).withOpacity(0.08),
+              ],
+            ),
+          ),
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 18 * s,
+              fontWeight: FontWeight.w900,
+              color: Colors.white.withOpacity(0.95),
+              letterSpacing: 0.2,
+              shadows: [
+                Shadow(
+                  blurRadius: 14,
+                  offset: const Offset(0, 8),
+                  color: Colors.black.withOpacity(0.22),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -485,12 +666,18 @@ class _GlassCard extends StatelessWidget {
   }
 }
 
-// ===================== INNER GLASS (legibilidad) =====================
+// ===================== INNER GLASS PANEL =====================
 
 class _InnerGlassPanel extends StatelessWidget {
   final double s;
   final Widget child;
-  const _InnerGlassPanel({required this.s, required this.child});
+  final EdgeInsetsGeometry padding;
+
+  const _InnerGlassPanel({
+    required this.s,
+    required this.child,
+    this.padding = EdgeInsets.zero,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -499,7 +686,7 @@ class _InnerGlassPanel extends StatelessWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
         child: Container(
-          padding: EdgeInsets.fromLTRB(14 * s, 14 * s, 14 * s, 14 * s),
+          padding: padding,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(22 * s),
             color: Colors.white.withOpacity(0.06),
@@ -512,26 +699,30 @@ class _InnerGlassPanel extends StatelessWidget {
   }
 }
 
-// ===================== IMAGE FIT (pro) =====================
+// ===================== IMAGE FIT (GLASS) =====================
 
-class _FitImageToCard extends StatelessWidget {
+class _FitImageToCardGlass extends StatelessWidget {
   final double s;
   final String asset;
   final double topInset;
   final double sideInset;
   final double bottomInset;
+  final double blurOpacity;
+  final double overlayOpacity;
 
-  const _FitImageToCard({
+  const _FitImageToCardGlass({
     required this.s,
     required this.asset,
     this.topInset = 10,
     this.sideInset = 10,
     this.bottomInset = 10,
+    this.blurOpacity = 0.12,
+    this.overlayOpacity = 0.05,
   });
 
   @override
   Widget build(BuildContext context) {
-    Widget fallback() => _ImageFallback(s: s, label: "IMAGEN\n(placeholder)");
+    Widget fallback() => _ImageFallbackGlass(s: s);
 
     return Stack(
       children: [
@@ -539,7 +730,7 @@ class _FitImageToCard extends StatelessWidget {
           child: ImageFiltered(
             imageFilter: ImageFilter.blur(sigmaX: 18 * s, sigmaY: 18 * s),
             child: Opacity(
-              opacity: 0.22,
+              opacity: blurOpacity,
               child: Image.asset(
                 asset,
                 fit: BoxFit.cover,
@@ -549,7 +740,9 @@ class _FitImageToCard extends StatelessWidget {
             ),
           ),
         ),
-        Positioned.fill(child: Container(color: Colors.black.withOpacity(0.05))),
+        Positioned.fill(
+          child: Container(color: Colors.black.withOpacity(overlayOpacity)),
+        ),
         Positioned.fill(
           child: Padding(
             padding: EdgeInsets.fromLTRB(
@@ -572,33 +765,19 @@ class _FitImageToCard extends StatelessWidget {
   }
 }
 
-class _ImageFallback extends StatelessWidget {
+class _ImageFallbackGlass extends StatelessWidget {
   final double s;
-  final String label;
-  const _ImageFallback({required this.s, required this.label});
+  const _ImageFallbackGlass({required this.s});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white.withOpacity(0.04),
       child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.image_rounded,
-                size: 56 * s, color: Colors.white.withOpacity(0.70)),
-            SizedBox(height: 10 * s),
-            Text(
-              label,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14.5 * s,
-                letterSpacing: 0.5,
-                fontWeight: FontWeight.w900,
-                color: Colors.white.withOpacity(0.78),
-              ),
-            ),
-          ],
+        child: Icon(
+          Icons.image_rounded,
+          size: 54 * s,
+          color: Colors.white.withOpacity(0.70),
         ),
       ),
     );
@@ -617,6 +796,23 @@ class _BackgroundImage extends StatelessWidget {
     return Stack(
       children: [
         Positioned.fill(child: Image.asset(asset, fit: BoxFit.cover)),
+
+        // overlay cinematic (cyan/rojo)
+        Positioned.fill(
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [
+                  const Color(0xFF2EC4FF).withOpacity(0.14),
+                  Colors.black.withOpacity(0.28),
+                  const Color(0xFFFF2B2B).withOpacity(0.12),
+                ],
+              ),
+            ),
+          ),
+        ),
         Positioned.fill(
           child: Container(
             decoration: BoxDecoration(
@@ -624,27 +820,14 @@ class _BackgroundImage extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.black.withOpacity(0.18),
-                  Colors.black.withOpacity(0.62),
+                  Colors.black.withOpacity(0.16),
+                  Colors.black.withOpacity(0.60),
                 ],
               ),
             ),
           ),
         ),
-        Positioned.fill(
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: RadialGradient(
-                center: const Alignment(0.0, -0.25),
-                radius: 1.20,
-                colors: [
-                  Colors.transparent,
-                  Colors.black.withOpacity(0.45),
-                ],
-              ),
-            ),
-          ),
-        ),
+
         Positioned.fill(
           child: IgnorePointer(
             child: Opacity(

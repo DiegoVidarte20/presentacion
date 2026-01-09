@@ -41,27 +41,27 @@ class _Slide16State extends State<Slide16> with SingleTickerProviderStateMixin {
 
     _titleIn = Tween<Offset>(begin: const Offset(0, -0.10), end: Offset.zero)
         .animate(
-      CurvedAnimation(
-        parent: _c,
-        curve: const Interval(0.00, 0.45, curve: Curves.easeOutCubic),
-      ),
-    );
+          CurvedAnimation(
+            parent: _c,
+            curve: const Interval(0.00, 0.45, curve: Curves.easeOutCubic),
+          ),
+        );
 
     _topCardIn = Tween<Offset>(begin: const Offset(0, 0.05), end: Offset.zero)
         .animate(
-      CurvedAnimation(
-        parent: _c,
-        curve: const Interval(0.12, 0.80, curve: Curves.easeOutCubic),
-      ),
-    );
+          CurvedAnimation(
+            parent: _c,
+            curve: const Interval(0.12, 0.80, curve: Curves.easeOutCubic),
+          ),
+        );
 
     _bottomCardIn =
         Tween<Offset>(begin: const Offset(0, 0.06), end: Offset.zero).animate(
-      CurvedAnimation(
-        parent: _c,
-        curve: const Interval(0.18, 1.00, curve: Curves.easeOutCubic),
-      ),
-    );
+          CurvedAnimation(
+            parent: _c,
+            curve: const Interval(0.18, 1.00, curve: Curves.easeOutCubic),
+          ),
+        );
 
     _c.forward();
   }
@@ -82,9 +82,13 @@ class _Slide16State extends State<Slide16> with SingleTickerProviderStateMixin {
     final s = _scaleByWidth(context);
 
     const bgAsset = "assets/slide1/fondoslide1.jpeg";
-
-    // ✅ una sola tira (con las 4 imágenes arriba)
-    const topStrip = "assets/slide16/slide16.jpeg";
+    // ✅ 4 imágenes (una por cada item)
+    const topAssets = [
+      "assets/slide16/slide16_1.png",
+      "assets/slide16/slide16_2.png",
+      "assets/slide16/slide16_3.png",
+      "assets/slide16/slide16_4.png",
+    ];
 
     return Scaffold(
       body: Stack(
@@ -103,16 +107,19 @@ class _Slide16State extends State<Slide16> with SingleTickerProviderStateMixin {
                     children: [
                       SlideTransition(
                         position: _titleIn,
-                        child: _TopHeadline(s: s, title: "Drives and Motors"),
+                        child: _HeaderGlass(
+                          scale: s,
+                          title: "Drives and Motors",
+                        ),
                       ),
                       SizedBox(height: 14 * s),
 
-                      // ===== TOP STRIP (4 items, 1 sola imagen) =====
+                      // ===== TOP STRIP (glass) =====
                       SlideTransition(
                         position: _topCardIn,
                         child: SizedBox(
                           height: 250 * s,
-                          child: _WhiteCard(
+                          child: _GlassCard(
                             s: s,
                             radius: 30,
                             padding: EdgeInsets.zero,
@@ -121,9 +128,9 @@ class _Slide16State extends State<Slide16> with SingleTickerProviderStateMixin {
                               child: Stack(
                                 children: [
                                   Positioned.fill(
-                                    child: _TopStrip4WithLabels(
+                                    child: _Top4ImagesWithLabels(
                                       s: s,
-                                      asset: topStrip,
+                                      assets: topAssets,
                                       labels: const [
                                         "MS2N Motors\n(Standard)",
                                         "MS2S Motors\n(Economics)",
@@ -132,15 +139,16 @@ class _Slide16State extends State<Slide16> with SingleTickerProviderStateMixin {
                                       ],
                                     ),
                                   ),
+                                  // borde interno pro (suave, no tan “marcador”)
                                   Positioned.fill(
                                     child: DecoratedBox(
                                       decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(30 * s),
+                                        borderRadius: BorderRadius.circular(
+                                          30 * s,
+                                        ),
                                         border: Border.all(
-                                          color: const Color(0xFF59D7FF)
-                                              .withOpacity(0.70),
-                                          width: 2.4,
+                                          color: Colors.white.withOpacity(0.14),
+                                          width: 1.6,
                                         ),
                                       ),
                                     ),
@@ -154,11 +162,11 @@ class _Slide16State extends State<Slide16> with SingleTickerProviderStateMixin {
 
                       SizedBox(height: 14 * s),
 
-                      // ===== BOTTOM PANEL (3 columnas) =====
+                      // ===== BOTTOM PANEL (glass + texto blanco) =====
                       Expanded(
                         child: SlideTransition(
                           position: _bottomCardIn,
-                          child: _WhiteCard(
+                          child: _GlassCard(
                             s: s,
                             radius: 30,
                             padding: EdgeInsets.fromLTRB(
@@ -174,7 +182,7 @@ class _Slide16State extends State<Slide16> with SingleTickerProviderStateMixin {
                                   Positioned.fill(
                                     child: IgnorePointer(
                                       child: Opacity(
-                                        opacity: 0.22,
+                                        opacity: 0.14,
                                         child: CustomPaint(
                                           painter: _SoftRingWatermarkPainter(),
                                         ),
@@ -187,51 +195,62 @@ class _Slide16State extends State<Slide16> with SingleTickerProviderStateMixin {
                                         CrossAxisAlignment.stretch,
                                     children: [
                                       Expanded(
-                                        child: _TextColumnCard(
+                                        child: _InnerGlassPanel(
                                           s: s,
-                                          title: "Potente para mayor rendimiento",
-                                          bullets: const [
-                                            "7 tamaños con par máximo de 4...692 Nm",
-                                            "Diseño compacto con un 30% más de densidad de par",
-                                            "Máxima eficiencia energética",
-                                          ],
-                                          subTitle:
-                                              "Configurable de Forma Flexible",
-                                          subBullets: const [
-                                            "Conexión robusta con solo cable hasta 75m",
-                                            "Encoder con seguridad funcional hasta SIL3, sin componentes de seguridad adicionales",
-                                            "Primera serie ATEX mundial con cable único",
-                                          ],
+                                          child: _TextColumnCard(
+                                            s: s,
+                                            title:
+                                                "Potente para mayor rendimiento",
+                                            bullets: const [
+                                              "7 tamaños con par máximo de 4...692 Nm",
+                                              "Diseño compacto con un 30% más de densidad de par",
+                                              "Máxima eficiencia energética",
+                                            ],
+                                            subTitle:
+                                                "Configurable de Forma Flexible",
+                                            subBullets: const [
+                                              "Conexión robusta con solo cable hasta 75m",
+                                              "Encoder con seguridad funcional hasta SIL3, sin componentes de seguridad adicionales",
+                                              "Primera serie ATEX mundial con cable único",
+                                            ],
+                                          ),
                                         ),
                                       ),
 
                                       SizedBox(width: 14 * s),
 
                                       Expanded(
-                                        child: _TextColumnCard(
+                                        child: _InnerGlassPanel(
                                           s: s,
-                                          title: "Valor Añadido con CtrlX Drive",
-                                          bullets: const [
-                                            "Gemelo digital, mismo modelo dinámico de temperatura para uso seguro hasta los límites operativos",
-                                            "Memoria de datos del motor con datos reales permite usar el motor como sensor de par simple sin componentes adicionales",
-                                            "Memoria de datos de encoder ampliada para una puesta en marcha más rápida con datos adicionales para ejes mecatrónicos",
-                                          ],
+                                          child: _TextColumnCard(
+                                            s: s,
+                                            title:
+                                                "Valor Añadido con CtrlX Drive",
+                                            bullets: const [
+                                              "Gemelo digital, mismo modelo dinámico de temperatura para uso seguro hasta los límites operativos",
+                                              "Memoria de datos del motor con datos reales permite usar el motor como sensor de par simple sin componentes adicionales",
+                                              "Memoria de datos de encoder ampliada para una puesta en marcha más rápida con datos adicionales para ejes mecatrónicos",
+                                            ],
+                                          ),
                                         ),
                                       ),
 
                                       SizedBox(width: 14 * s),
 
                                       Expanded(
-                                        child: _RightColumnCard(
+                                        child: _InnerGlassPanel(
                                           s: s,
-                                          title: "Motores de Accionamiento",
-                                          accent: "Directo",
-                                          lines: const [
-                                            "Productividad máxima de movimientos lineales o rotativos",
-                                            "Alta dinámica con calidad de control superior",
-                                            "Simplificación del diseño de la máquina",
-                                            "Menos componentes y desgaste para una mayor disponibilidad",
-                                          ],
+                                          child: _RightColumnCard(
+                                            s: s,
+                                            title: "Motores de Accionamiento",
+                                            accent: "Directo",
+                                            lines: const [
+                                              "Productividad máxima de movimientos lineales o rotativos",
+                                              "Alta dinámica con calidad de control superior",
+                                              "Simplificación del diseño de la máquina",
+                                              "Menos componentes y desgaste para una mayor disponibilidad",
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -240,12 +259,12 @@ class _Slide16State extends State<Slide16> with SingleTickerProviderStateMixin {
                                   Positioned.fill(
                                     child: DecoratedBox(
                                       decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(30 * s),
+                                        borderRadius: BorderRadius.circular(
+                                          30 * s,
+                                        ),
                                         border: Border.all(
-                                          color: const Color(0xFF59D7FF)
-                                              .withOpacity(0.65),
-                                          width: 2.4,
+                                          color: Colors.white.withOpacity(0.14),
+                                          width: 1.6,
                                         ),
                                       ),
                                     ),
@@ -279,30 +298,82 @@ class _Slide16State extends State<Slide16> with SingleTickerProviderStateMixin {
   }
 }
 
-// ===================== TOP HEADLINE =====================
+// ===================== HEADER GLASS =====================
 
-class _TopHeadline extends StatelessWidget {
-  final double s;
+class _HeaderGlass extends StatelessWidget {
+  final double scale;
   final String title;
-  const _TopHeadline({required this.s, required this.title});
+
+  const _HeaderGlass({required this.scale, required this.title});
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: TextStyle(
-        fontSize: 54 * s,
-        height: 1.0,
-        fontWeight: FontWeight.w900,
-        letterSpacing: 0.2,
-        color: Colors.white.withOpacity(0.96),
-        shadows: [
-          Shadow(
-            blurRadius: 22,
-            offset: const Offset(0, 10),
-            color: Colors.black.withOpacity(0.45),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(18 * scale),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: 22 * scale,
+            vertical: 14 * scale,
           ),
-        ],
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(18 * scale),
+            color: Colors.white.withOpacity(0.10),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.14),
+              width: 1.6,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.30),
+                blurRadius: 26 * scale,
+                offset: Offset(0, 12 * scale),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 10 * scale,
+                height: 34 * scale,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(99),
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      const Color(0xFF2EC4FF).withOpacity(0.95),
+                      const Color(0xFFFF2B2B).withOpacity(0.85),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(width: 14 * scale),
+              Expanded(
+                child: Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 54 * scale,
+                    height: 1.0,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 0.2,
+                    color: Colors.white.withOpacity(0.96),
+                    shadows: [
+                      Shadow(
+                        blurRadius: 22,
+                        offset: const Offset(0, 10),
+                        color: Colors.black.withOpacity(0.35),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -310,39 +381,48 @@ class _TopHeadline extends StatelessWidget {
 
 // ===================== TOP STRIP (4 slices + labels) =====================
 
-class _TopStrip4WithLabels extends StatelessWidget {
-  final double s;
-  final String asset;
-  final List<String> labels;
+// ===================== TOP (4 imágenes separadas + labels) =====================
 
-  const _TopStrip4WithLabels({
+class _Top4ImagesWithLabels extends StatelessWidget {
+  final double s;
+  final List<String> assets; // 4 rutas
+  final List<String> labels; // 4 textos
+
+  const _Top4ImagesWithLabels({
     required this.s,
-    required this.asset,
+    required this.assets,
     required this.labels,
   });
 
   @override
   Widget build(BuildContext context) {
-    final n = labels.length; // 4
+    final n = assets.length; // 4
     final labelH = 56.0 * s;
 
     return Stack(
       children: [
+        // fondo suave para mantener vibe
         Positioned.fill(
-          child: ImageFiltered(
-            imageFilter: ImageFilter.blur(sigmaX: 18 * s, sigmaY: 18 * s),
-            child: Opacity(
-              opacity: 0.35,
-              child: Image.asset(asset, fit: BoxFit.cover),
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [
+                  const Color(0xFF2EC4FF).withOpacity(0.08),
+                  Colors.black.withOpacity(0.10),
+                  const Color(0xFFFF2B2B).withOpacity(0.06),
+                ],
+              ),
             ),
           ),
         ),
-        Positioned.fill(child: Container(color: Colors.white.withOpacity(0.86))),
 
         Padding(
           padding: EdgeInsets.fromLTRB(22 * s, 16 * s, 22 * s, 14 * s),
           child: Column(
             children: [
+              // ===== fila de 4 imágenes =====
               Expanded(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -350,22 +430,19 @@ class _TopStrip4WithLabels extends StatelessWidget {
                     return Expanded(
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 18 * s),
-                        child: _StripSliceTile(
+                        child: _GlassImageTile(
                           s: s,
-                          asset: asset,
-                          index: i,
-                          count: n,
-                          // subimos para ocultar el texto que viene “impreso” en la tira
-                          cropShiftYFactor: 0.28,
-                          // zoom para que el producto se vea grande
-                          zoom: 1.18,
+                          asset: assets[i],
                         ),
                       ),
                     );
                   }),
                 ),
               ),
+
               SizedBox(height: 10 * s),
+
+              // ===== fila de labels (debajo de cada imagen) =====
               SizedBox(
                 height: labelH,
                 child: Row(
@@ -373,7 +450,7 @@ class _TopStrip4WithLabels extends StatelessWidget {
                     return Expanded(
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10 * s),
-                        child: _MotorLabel(s: s, text: labels[i]),
+                        child: _TitlePill(s: s, text: labels[i]),
                       ),
                     );
                   }),
@@ -398,116 +475,171 @@ class _TopStrip4WithLabels extends StatelessWidget {
   }
 }
 
-/// Tile que muestra SOLO 1/4 de la tira (sin repetirse)
-class _StripSliceTile extends StatelessWidget {
+class _GlassImageTile extends StatelessWidget {
   final double s;
   final String asset;
-  final int index;
-  final int count;
-  final double cropShiftYFactor; // 0.0..0.4 aprox
-  final double zoom; // 1.0..1.4 aprox
 
-  const _StripSliceTile({
+  const _GlassImageTile({
     required this.s,
     required this.asset,
-    required this.index,
-    required this.count,
-    this.cropShiftYFactor = 0.28,
-    this.zoom = 1.18,
   });
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, c) {
-        final w = c.maxWidth;
-        final h = c.maxHeight;
+    Widget fallback() => Container(
+          color: Colors.white.withOpacity(0.05),
+          child: Center(
+            child: Icon(Icons.image_rounded,
+                size: 42 * s, color: Colors.white.withOpacity(0.70)),
+          ),
+        );
 
-        final shiftY = -(h * cropShiftYFactor);
-
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(16 * s),
-          child: Container(
-            color: Colors.transparent,
-            child: ClipRect(
-              child: Transform.translate(
-                offset: Offset(-w * index, shiftY),
-                child: Transform.scale(
-                  scale: zoom,
-                  alignment: Alignment.topCenter,
-                  child: SizedBox(
-                    width: w * count,
-                    height: h * 1.35,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16 * s),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.06),
+            borderRadius: BorderRadius.circular(16 * s),
+            border: Border.all(color: Colors.white.withOpacity(0.12), width: 1.2),
+          ),
+          child: Stack(
+            children: [
+              // blur cover atrás (con la misma imagen)
+              Positioned.fill(
+                child: ImageFiltered(
+                  imageFilter: ImageFilter.blur(sigmaX: 18 * s, sigmaY: 18 * s),
+                  child: Opacity(
+                    opacity: 0.45,
                     child: Image.asset(
                       asset,
                       fit: BoxFit.cover,
-                      alignment: Alignment.topCenter,
-                      filterQuality: FilterQuality.high,
+                      alignment: Alignment.center,
+                      errorBuilder: (_, __, ___) => fallback(),
                     ),
                   ),
                 ),
               ),
-            ),
+              Positioned.fill(
+                child: Container(color: Colors.black.withOpacity(0.08)),
+              ),
+              // imagen adelante (contain para que se vea el producto grande y limpio)
+              Positioned.fill(
+                child: Padding(
+                  padding: EdgeInsets.all(10 * s),
+                  child: Image.asset(
+                    asset,
+                    fit: BoxFit.contain,
+                    alignment: Alignment.center,
+                    filterQuality: FilterQuality.high,
+                    errorBuilder: (_, __, ___) => fallback(),
+                  ),
+                ),
+              ),
+            ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
 
-class _MotorLabel extends StatelessWidget {
+
+// ===================== TITLE PILL (glass) =====================
+
+class _TitlePill extends StatelessWidget {
   final double s;
   final String text;
-  const _MotorLabel({required this.s, required this.text});
+  const _TitlePill({required this.s, required this.text});
 
   @override
   Widget build(BuildContext context) {
-    // Formato especial: subtexto entre paréntesis, y si dice Economics lo subrayamos
-    final parts = text.split("\n");
-    final line1 = parts.isNotEmpty ? parts[0] : text;
-    final line2 = parts.length > 1 ? parts[1] : "";
+    final radius = 18 * s;
 
-    final isEconomics = line2.toLowerCase().contains("economics");
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          line1,
-          textAlign: TextAlign.center,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            fontSize: 18 * s,
-            height: 1.0,
-            fontWeight: FontWeight.w900,
-            color: const Color(0xFF0B1B2B).withOpacity(0.95),
-          ),
-        ),
-        if (line2.isNotEmpty) SizedBox(height: 4 * s),
-        if (line2.isNotEmpty)
-          Text(
-            line2,
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 16 * s,
-              height: 1.0,
-              fontWeight: FontWeight.w900,
-              color: const Color(0xFF0B1B2B).withOpacity(0.92),
-              decoration:
-                  isEconomics ? TextDecoration.underline : TextDecoration.none,
-              decorationThickness: 2,
-              decorationColor: const Color(0xFF59D7FF).withOpacity(0.95),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(radius),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 12 * s, vertical: 10 * s),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(radius),
+            color: Colors.white.withOpacity(0.10),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.14),
+              width: 1.2,
             ),
           ),
-      ],
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(radius),
+                    gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [
+                        const Color(0xFF2EC4FF).withOpacity(0.22),
+                        Colors.white.withOpacity(0.06),
+                        const Color(0xFFFF2B2B).withOpacity(0.16),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Center(
+                child: Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 14.5 * s,
+                    height: 1.05,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white.withOpacity(0.95),
+                    letterSpacing: 0.1,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
 
-// ===================== BOTTOM COLUMNS =====================
+// ===================== INNER GLASS (para columnas) =====================
+
+class _InnerGlassPanel extends StatelessWidget {
+  final double s;
+  final Widget child;
+  const _InnerGlassPanel({required this.s, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(22 * s),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+        child: Container(
+          padding: EdgeInsets.fromLTRB(12 * s, 12 * s, 12 * s, 12 * s),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(22 * s),
+            color: Colors.white.withOpacity(0.06),
+            border: Border.all(color: Colors.white.withOpacity(0.10)),
+          ),
+          child: child,
+        ),
+      ),
+    );
+  }
+}
+
+// ===================== BOTTOM COLUMNS (texto blanco) =====================
 
 class _TextColumnCard extends StatelessWidget {
   final double s;
@@ -528,34 +660,34 @@ class _TextColumnCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(10 * s, 8 * s, 10 * s, 8 * s),
+      padding: EdgeInsets.fromLTRB(6 * s, 4 * s, 6 * s, 4 * s),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
             style: TextStyle(
-              fontSize: 26 * s,
+              fontSize: 24.5 * s,
               fontWeight: FontWeight.w900,
-              color: const Color(0xFF0B1B2B).withOpacity(0.96),
+              color: Colors.white.withOpacity(0.96),
             ),
           ),
           SizedBox(height: 10 * s),
-          ...bullets.map((t) => _BulletLineDark(s: s, text: t)),
+          ...bullets.map((t) => _BulletLineLight(s: s, text: t)),
           if (subTitle != null) ...[
             SizedBox(height: 14 * s),
             Text(
               subTitle!,
               style: TextStyle(
-                fontSize: 24 * s,
+                fontSize: 22.5 * s,
                 fontWeight: FontWeight.w900,
-                color: const Color(0xFF0B1B2B).withOpacity(0.96),
+                color: Colors.white.withOpacity(0.96),
               ),
             ),
           ],
           if (subBullets != null) ...[
             SizedBox(height: 10 * s),
-            ...subBullets!.map((t) => _BulletLineDark(s: s, text: t)),
+            ...subBullets!.map((t) => _BulletLineLight(s: s, text: t)),
           ],
         ],
       ),
@@ -579,7 +711,7 @@ class _RightColumnCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(10 * s, 8 * s, 10 * s, 8 * s),
+      padding: EdgeInsets.fromLTRB(6 * s, 4 * s, 6 * s, 4 * s),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -587,18 +719,18 @@ class _RightColumnCard extends StatelessWidget {
             title,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 26 * s,
+              fontSize: 24.5 * s,
               fontWeight: FontWeight.w900,
-              color: const Color(0xFF0B1B2B).withOpacity(0.96),
+              color: Colors.white.withOpacity(0.96),
             ),
           ),
           Text(
             accent,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 26 * s,
+              fontSize: 24.5 * s,
               fontWeight: FontWeight.w900,
-              color: const Color(0xFF0B1B2B).withOpacity(0.96),
+              color: const Color(0xFF2EC4FF).withOpacity(0.95),
             ),
           ),
           SizedBox(height: 12 * s),
@@ -609,10 +741,10 @@ class _RightColumnCard extends StatelessWidget {
                 t,
                 textAlign: TextAlign.left,
                 style: TextStyle(
-                  fontSize: 18 * s,
-                  height: 1.2,
+                  fontSize: 17.5 * s,
+                  height: 1.22,
                   fontWeight: FontWeight.w700,
-                  color: const Color(0xFF0B1B2B).withOpacity(0.92),
+                  color: Colors.white.withOpacity(0.90),
                 ),
               ),
             ),
@@ -623,10 +755,10 @@ class _RightColumnCard extends StatelessWidget {
   }
 }
 
-class _BulletLineDark extends StatelessWidget {
+class _BulletLineLight extends StatelessWidget {
   final double s;
   final String text;
-  const _BulletLineDark({required this.s, required this.text});
+  const _BulletLineLight({required this.s, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -638,11 +770,18 @@ class _BulletLineDark extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(top: 7 * s),
             child: Container(
-              width: 6.5 * s,
-              height: 6.5 * s,
+              width: 7 * s,
+              height: 7 * s,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: const Color(0xFF0B1B2B).withOpacity(0.82),
+                color: const Color(0xFF2EC4FF).withOpacity(0.80),
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 10,
+                    offset: const Offset(0, 6),
+                    color: Colors.black.withOpacity(0.18),
+                  ),
+                ],
               ),
             ),
           ),
@@ -651,10 +790,10 @@ class _BulletLineDark extends StatelessWidget {
             child: Text(
               text,
               style: TextStyle(
-                fontSize: 17.5 * s,
+                fontSize: 17.0 * s,
                 height: 1.22,
                 fontWeight: FontWeight.w700,
-                color: const Color(0xFF0B1B2B).withOpacity(0.92),
+                color: Colors.white.withOpacity(0.90),
               ),
             ),
           ),
@@ -664,15 +803,15 @@ class _BulletLineDark extends StatelessWidget {
   }
 }
 
-// ===================== WHITE CARD (tipo screenshot) =====================
+// ===================== GLASS CARD =====================
 
-class _WhiteCard extends StatelessWidget {
+class _GlassCard extends StatelessWidget {
   final double s;
   final Widget child;
   final double radius;
   final EdgeInsetsGeometry padding;
 
-  const _WhiteCard({
+  const _GlassCard({
     required this.s,
     required this.child,
     this.radius = 26,
@@ -686,21 +825,46 @@ class _WhiteCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(r),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+        filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
         child: Container(
           padding: padding,
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.90),
+            color: Colors.white.withOpacity(0.08),
             borderRadius: BorderRadius.circular(r),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.14),
+              width: 1.8,
+            ),
             boxShadow: [
               BoxShadow(
                 blurRadius: 28,
                 offset: const Offset(0, 16),
-                color: Colors.black.withOpacity(0.28),
+                color: Colors.black.withOpacity(0.32),
               ),
             ],
           ),
-          child: child,
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(r),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Colors.white.withOpacity(0.10),
+                        Colors.transparent,
+                        Colors.black.withOpacity(0.08),
+                      ],
+                      stops: const [0.0, 0.55, 1.0],
+                    ),
+                  ),
+                ),
+              ),
+              child,
+            ],
+          ),
         ),
       ),
     );
@@ -715,7 +879,7 @@ class _SoftRingWatermarkPainter extends CustomPainter {
     final p = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 10
-      ..color = const Color(0xFF59D7FF).withOpacity(0.16);
+      ..color = Colors.white.withOpacity(0.16);
 
     final r = size.height * 0.42;
     canvas.drawCircle(Offset(size.width * 0.20, size.height * 0.62), r, p);
@@ -725,11 +889,23 @@ class _SoftRingWatermarkPainter extends CustomPainter {
     final p2 = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 4
-      ..color = const Color(0xFF59D7FF).withOpacity(0.12);
+      ..color = Colors.white.withOpacity(0.12);
 
-    canvas.drawCircle(Offset(size.width * 0.20, size.height * 0.62), r * 0.72, p2);
-    canvas.drawCircle(Offset(size.width * 0.52, size.height * 0.60), r * 0.72, p2);
-    canvas.drawCircle(Offset(size.width * 0.83, size.height * 0.62), r * 0.72, p2);
+    canvas.drawCircle(
+      Offset(size.width * 0.20, size.height * 0.62),
+      r * 0.72,
+      p2,
+    );
+    canvas.drawCircle(
+      Offset(size.width * 0.52, size.height * 0.60),
+      r * 0.72,
+      p2,
+    );
+    canvas.drawCircle(
+      Offset(size.width * 0.83, size.height * 0.62),
+      r * 0.72,
+      p2,
+    );
   }
 
   @override
@@ -748,7 +924,28 @@ class _BackgroundImage extends StatelessWidget {
     return Stack(
       children: [
         Positioned.fill(
-          child: Image.asset(asset, fit: BoxFit.cover, alignment: Alignment.center),
+          child: Image.asset(
+            asset,
+            fit: BoxFit.cover,
+            alignment: Alignment.center,
+          ),
+        ),
+
+        // overlay cinematic (cyan/rojo)
+        Positioned.fill(
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [
+                  const Color(0xFF2EC4FF).withOpacity(0.14),
+                  Colors.black.withOpacity(0.28),
+                  const Color(0xFFFF2B2B).withOpacity(0.12),
+                ],
+              ),
+            ),
+          ),
         ),
         Positioned.fill(
           child: Container(
@@ -764,20 +961,7 @@ class _BackgroundImage extends StatelessWidget {
             ),
           ),
         ),
-        Positioned.fill(
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: RadialGradient(
-                center: const Alignment(0.0, -0.25),
-                radius: 1.20,
-                colors: [
-                  Colors.transparent,
-                  Colors.black.withOpacity(0.45),
-                ],
-              ),
-            ),
-          ),
-        ),
+
         Positioned.fill(
           child: IgnorePointer(
             child: Opacity(
@@ -810,5 +994,6 @@ class _GridPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _GridPainter oldDelegate) => oldDelegate.step != step;
+  bool shouldRepaint(covariant _GridPainter oldDelegate) =>
+      oldDelegate.step != step;
 }

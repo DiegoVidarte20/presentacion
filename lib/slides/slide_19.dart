@@ -39,8 +39,8 @@ class _Slide19State extends State<Slide19> with SingleTickerProviderStateMixin {
       ),
     );
 
-    _titleIn = Tween<Offset>(begin: const Offset(0, -0.10), end: Offset.zero)
-        .animate(
+    _titleIn =
+        Tween<Offset>(begin: const Offset(0, -0.10), end: Offset.zero).animate(
       CurvedAnimation(
         parent: _c,
         curve: const Interval(0.00, 0.45, curve: Curves.easeOutCubic),
@@ -102,8 +102,8 @@ class _Slide19State extends State<Slide19> with SingleTickerProviderStateMixin {
                     children: [
                       SlideTransition(
                         position: _titleIn,
-                        child: _TopHeadline(
-                          s: s,
+                        child: _HeaderGlass(
+                          scale: s,
                           title: "Programación IEC y NO-IEC",
                         ),
                       ),
@@ -113,69 +113,144 @@ class _Slide19State extends State<Slide19> with SingleTickerProviderStateMixin {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            // ===== LEFT CARD: text + image bottom =====
+                            // ===== LEFT GLASS (TODO EN UN SOLO CARD: título + texto + imagen) =====
                             Expanded(
                               flex: 44,
                               child: SlideTransition(
                                 position: _leftIn,
-                                child: _WhiteCard(
+                                child: _GlassCard(
                                   s: s,
                                   radius: 30,
                                   padding: EdgeInsets.fromLTRB(
                                     18 * s,
                                     16 * s,
                                     18 * s,
-                                    14 * s,
+                                    16 * s,
                                   ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      _LeftHeader(s: s),
-                                      SizedBox(height: 10 * s),
-                                      Expanded(
-                                        child: _LeftParagraphs(s: s),
-                                      ),
-                                      SizedBox(height: 12 * s),
-
-                                      // --- Bottom image inside left card ---
-                                      SizedBox(
-                                        height: 210 * s,
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(18 * s),
-                                          child: Stack(
-                                            children: [
-                                              Positioned.fill(
-                                                child: _FitImageToCard(
-                                                  s: s,
-                                                  asset: leftBottomImage,
-                                                  topInset: 8 * s,
-                                                  sideInset: 8 * s,
-                                                  bottomInset: 8 * s,
-                                                  blurOpacity: 0.12,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(30 * s),
+                                    child: Stack(
+                                      children: [
+                                        // vibe/blur interno suave (para que no se vea “vacío”)
+                                        Positioned.fill(
+                                          child: IgnorePointer(
+                                            child: Opacity(
+                                              opacity: 0.10,
+                                              child: ImageFiltered(
+                                                imageFilter: ImageFilter.blur(
+                                                  sigmaX: 22 * s,
+                                                  sigmaY: 22 * s,
+                                                ),
+                                                child: Image.asset(
+                                                  leftBottomImage,
+                                                  fit: BoxFit.cover,
+                                                  alignment: Alignment.center,
                                                 ),
                                               ),
-                                              Positioned.fill(
-                                                child: DecoratedBox(
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            18 * s),
-                                                    border: Border.all(
-                                                      color:
-                                                          const Color(0xFF59D7FF)
-                                                              .withOpacity(0.55),
-                                                      width: 1.6,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                        Positioned.fill(
+                                          child: Container(
+                                            color: Colors.black.withOpacity(0.10),
+                                          ),
+                                        ),
+
+                                        // Contenido real
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.stretch,
+                                          children: [
+                                            _LeftHeaderLight(s: s),
+                                            SizedBox(height: 10 * s),
+
+                                            // Texto sin “card extra”: solo un panel suave, pegado al mismo card
+                                            Expanded(
+                                              flex: 46,
+                                              child: Container(
+                                                padding: EdgeInsets.fromLTRB(
+                                                  14 * s,
+                                                  12 * s,
+                                                  14 * s,
+                                                  12 * s,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(18 * s),
+                                                  color: Colors.white.withOpacity(0.06),
+                                                  border: Border.all(
+                                                    color: Colors.white.withOpacity(0.10),
+                                                    width: 1.0,
+                                                  ),
+                                                ),
+                                                child: _LeftParagraphsLight(s: s),
+                                              ),
+                                            ),
+
+                                            SizedBox(height: 10 * s),
+
+                                            // separador fino (integra texto+imagen)
+                                            Container(
+                                              height: 1.2 * s,
+                                              decoration: BoxDecoration(
+                                                gradient: LinearGradient(
+                                                  begin: Alignment.centerLeft,
+                                                  end: Alignment.centerRight,
+                                                  colors: [
+                                                    Colors.transparent,
+                                                    const Color(0xFF2EC4FF)
+                                                        .withOpacity(0.45),
+                                                    Colors.transparent,
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+
+                                            SizedBox(height: 10 * s),
+
+                                            // Imagen GRANDE, dentro del mismo card (NO “card aparte”)
+                                            Expanded(
+                                              flex: 54,
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(18 * s),
+                                                child: Stack(
+                                                  children: [
+                                                    Positioned.fill(
+                                                      child: _FitImageToCard(
+                                                        s: s,
+                                                        asset: leftBottomImage,
+                                                        topInset: 10 * s,
+                                                        sideInset: 10 * s,
+                                                        bottomInset: 10 * s,
+                                                        blurOpacity: 0.14,
+                                                        overlayOpacity: 0.04,
+                                                        fit: BoxFit.contain,
+                                                      ),
+                                                    ),
+                                                    // borde MUY suave para que no parezca otro card
+                                                    Positioned.fill(
+                                                      child: DecoratedBox(
+                                                        decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  18 * s),
+                                                          border: Border.all(
+                                                            color: Colors.white
+                                                                .withOpacity(0.10),
+                                                            width: 1.1,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -183,12 +258,12 @@ class _Slide19State extends State<Slide19> with SingleTickerProviderStateMixin {
 
                             SizedBox(width: 18 * s),
 
-                            // ===== RIGHT CARD: full image =====
+                            // ===== RIGHT GLASS: full image =====
                             Expanded(
                               flex: 56,
                               child: SlideTransition(
                                 position: _rightIn,
-                                child: _WhiteCard(
+                                child: _GlassCard(
                                   s: s,
                                   radius: 34,
                                   padding: EdgeInsets.zero,
@@ -203,7 +278,9 @@ class _Slide19State extends State<Slide19> with SingleTickerProviderStateMixin {
                                             topInset: 10 * s,
                                             sideInset: 10 * s,
                                             bottomInset: 10 * s,
-                                            blurOpacity: 0.10,
+                                            blurOpacity: 0.14,
+                                            overlayOpacity: 0.06,
+                                            fit: BoxFit.contain,
                                           ),
                                         ),
                                         Positioned.fill(
@@ -212,9 +289,9 @@ class _Slide19State extends State<Slide19> with SingleTickerProviderStateMixin {
                                               borderRadius:
                                                   BorderRadius.circular(34 * s),
                                               border: Border.all(
-                                                color: const Color(0xFF59D7FF)
-                                                    .withOpacity(0.70),
-                                                width: 2.4,
+                                                color:
+                                                    Colors.white.withOpacity(0.14),
+                                                width: 1.6,
                                               ),
                                             ),
                                           ),
@@ -251,37 +328,136 @@ class _Slide19State extends State<Slide19> with SingleTickerProviderStateMixin {
   }
 }
 
-// ===================== LEFT TEXT =====================
+// ===================== HEADER GLASS =====================
 
-class _LeftHeader extends StatelessWidget {
-  final double s;
-  const _LeftHeader({required this.s});
+class _HeaderGlass extends StatelessWidget {
+  final double scale;
+  final String title;
+
+  const _HeaderGlass({required this.scale, required this.title});
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      "Interface IDE – Entorno de Desarrollo Integrado",
-      style: TextStyle(
-        fontSize: 18.5 * s,
-        fontWeight: FontWeight.w900,
-        height: 1.1,
-        color: const Color(0xFF0B1B2B).withOpacity(0.96),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(18 * scale),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: 22 * scale,
+            vertical: 14 * scale,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(18 * scale),
+            color: Colors.white.withOpacity(0.10),
+            border:
+                Border.all(color: Colors.white.withOpacity(0.14), width: 1.6),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.30),
+                blurRadius: 26 * scale,
+                offset: Offset(0, 12 * scale),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 10 * scale,
+                height: 34 * scale,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(99),
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      const Color(0xFF2EC4FF).withOpacity(0.95),
+                      const Color(0xFFFF2B2B).withOpacity(0.85),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(width: 14 * scale),
+              Expanded(
+                child: Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 52 * scale,
+                    height: 1.0,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 0.2,
+                    color: Colors.white.withOpacity(0.96),
+                    shadows: [
+                      Shadow(
+                        blurRadius: 22,
+                        offset: const Offset(0, 10),
+                        color: Colors.black.withOpacity(0.35),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 }
 
-class _LeftParagraphs extends StatelessWidget {
+// ===================== LEFT TEXT (WHITE) =====================
+
+class _LeftHeaderLight extends StatelessWidget {
   final double s;
-  const _LeftParagraphs({required this.s});
+  const _LeftHeaderLight({required this.s});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      // 👇 más margen arriba para que no lo coma el clip
+      padding: EdgeInsets.only(top: 8 * s, bottom: 2 * s, left: 6 * s),
+      child: Text(
+        "Interface IDE – Entorno de Desarrollo Integrado",
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+        textHeightBehavior: const TextHeightBehavior(
+          // 👇 ayuda a que no se “corte” el primer renglón
+          applyHeightToFirstAscent: false,
+          applyHeightToLastDescent: false,
+        ),
+        style: TextStyle(
+          fontSize: 17.8 * s,
+          fontWeight: FontWeight.w900,
+          height: 1.18,
+          color: Colors.white.withOpacity(0.96),
+          // 👇 sombra más “safe” (menos hacia arriba)
+          shadows: [
+            Shadow(
+              blurRadius: 16,
+              offset: const Offset(0, 6),
+              color: Colors.black.withOpacity(0.22),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+class _LeftParagraphsLight extends StatelessWidget {
+  final double s;
+  const _LeftParagraphsLight({required this.s});
 
   @override
   Widget build(BuildContext context) {
     final base = TextStyle(
-      fontSize: 15.8 * s,
+      fontSize: 15.6 * s,
       height: 1.25,
       fontWeight: FontWeight.w700,
-      color: const Color(0xFF0B1B2B).withOpacity(0.90),
+      color: Colors.white.withOpacity(0.90),
     );
 
     return SingleChildScrollView(
@@ -313,44 +489,15 @@ class _LeftParagraphs extends StatelessWidget {
   }
 }
 
-// ===================== TITLE =====================
+// ===================== GLASS CARD =====================
 
-class _TopHeadline extends StatelessWidget {
-  final double s;
-  final String title;
-  const _TopHeadline({required this.s, required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: TextStyle(
-        fontSize: 52 * s,
-        height: 1.0,
-        fontWeight: FontWeight.w900,
-        letterSpacing: 0.2,
-        color: Colors.white.withOpacity(0.96),
-        shadows: [
-          Shadow(
-            blurRadius: 22,
-            offset: const Offset(0, 10),
-            color: Colors.black.withOpacity(0.45),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ===================== WHITE CARD =====================
-
-class _WhiteCard extends StatelessWidget {
+class _GlassCard extends StatelessWidget {
   final double s;
   final Widget child;
   final double radius;
   final EdgeInsetsGeometry padding;
 
-  const _WhiteCard({
+  const _GlassCard({
     required this.s,
     required this.child,
     this.radius = 26,
@@ -364,25 +511,46 @@ class _WhiteCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(r),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+        filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
         child: Container(
           padding: padding,
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.92),
+            color: Colors.white.withOpacity(0.08),
             borderRadius: BorderRadius.circular(r),
             border: Border.all(
-              color: const Color(0xFF59D7FF).withOpacity(0.75),
-              width: 2.4,
+              color: Colors.white.withOpacity(0.14),
+              width: 1.8,
             ),
             boxShadow: [
               BoxShadow(
                 blurRadius: 28,
                 offset: const Offset(0, 16),
-                color: Colors.black.withOpacity(0.28),
+                color: Colors.black.withOpacity(0.32),
               ),
             ],
           ),
-          child: child,
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(r),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Colors.white.withOpacity(0.10),
+                        Colors.transparent,
+                        Colors.black.withOpacity(0.08),
+                      ],
+                      stops: const [0.0, 0.55, 1.0],
+                    ),
+                  ),
+                ),
+              ),
+              child,
+            ],
+          ),
         ),
       ),
     );
@@ -398,6 +566,8 @@ class _FitImageToCard extends StatelessWidget {
   final double sideInset;
   final double bottomInset;
   final double blurOpacity;
+  final double overlayOpacity;
+  final BoxFit fit;
 
   const _FitImageToCard({
     required this.s,
@@ -405,7 +575,9 @@ class _FitImageToCard extends StatelessWidget {
     this.topInset = 10,
     this.sideInset = 10,
     this.bottomInset = 10,
-    this.blurOpacity = 0.12,
+    this.blurOpacity = 0.14,
+    this.overlayOpacity = 0.06,
+    this.fit = BoxFit.contain,
   });
 
   @override
@@ -428,7 +600,9 @@ class _FitImageToCard extends StatelessWidget {
             ),
           ),
         ),
-        Positioned.fill(child: Container(color: Colors.black.withOpacity(0.02))),
+        Positioned.fill(
+          child: Container(color: Colors.black.withOpacity(overlayOpacity)),
+        ),
         Positioned.fill(
           child: Padding(
             padding: EdgeInsets.fromLTRB(
@@ -439,7 +613,7 @@ class _FitImageToCard extends StatelessWidget {
             ),
             child: Image.asset(
               asset,
-              fit: BoxFit.contain,
+              fit: fit,
               alignment: Alignment.center,
               filterQuality: FilterQuality.high,
               errorBuilder: (_, __, ___) => fallback(),
@@ -458,10 +632,13 @@ class _ImageFallback extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black.withOpacity(0.06),
+      color: Colors.white.withOpacity(0.04),
       child: Center(
-        child: Icon(Icons.image_rounded,
-            size: 54 * s, color: Colors.black.withOpacity(0.45)),
+        child: Icon(
+          Icons.image_rounded,
+          size: 54 * s,
+          color: Colors.white.withOpacity(0.70),
+        ),
       ),
     );
   }

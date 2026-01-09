@@ -21,6 +21,26 @@ import 'slide_17.dart';
 import 'slide_18.dart';
 import 'slide_19.dart';
 import 'slide_20.dart';
+import 'slide_21.dart';
+import 'slide_22.dart';
+import 'slide_23.dart';
+import 'slide_24.dart';
+import 'slide_25.dart';
+import 'slide_26.dart';
+import 'slide_27.dart';
+import 'slide_28.dart';
+import 'slide_29.dart';
+import 'slide_30.dart';
+import 'slide_31.dart';
+import 'slide_32.dart';
+import 'slide_33.dart';
+import 'slide_34.dart';
+import 'slide_35.dart';
+import 'slide_36.dart';
+import 'slide_37.dart';
+import 'slide_38.dart';
+import 'slide_39.dart';
+import 'slide_40.dart';
 
 class Slides extends StatefulWidget {
   const Slides({super.key});
@@ -54,6 +74,26 @@ class _SlidesState extends State<Slides> {
     Slide18(),
     Slide19(),
     Slide20(),
+    Slide21(),
+    Slide22(),
+    Slide23(),
+    Slide24(),
+    Slide25(),
+    Slide26(),
+    Slide27(),
+    Slide28(),
+    Slide29(),
+    Slide30(),
+    Slide31(),
+    Slide32(),
+    Slide33(),
+    Slide34(),
+    Slide35(),
+    Slide36(),
+    Slide37(),
+    Slide38(),
+    Slide39(),
+    Slide40()
 
   ];
 
