@@ -182,67 +182,74 @@ class _HeaderTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(22 * s),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20 * s, vertical: 14 * s),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                const Color(0xFF0B2B55).withOpacity(0.92),
-                const Color(0xFF0A3D7A).withOpacity(0.75),
-              ],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-            ),
-            border: Border.all(color: Colors.white.withOpacity(0.10)),
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 24,
-                offset: const Offset(0, 12),
-                color: Colors.black.withOpacity(0.35),
-              ),
-            ],
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 26 * s, vertical: 18 * s),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(18 * s),
+        color: Colors.white.withOpacity(0.10),
+        border: Border.all(color: Colors.white.withOpacity(0.14)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.30),
+            blurRadius: 26 * s,
+            offset: Offset(0, 12 * s),
           ),
-          child: Row(
-            children: [
-              Container(
-                width: 10 * s,
-                height: 30 * s,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(99),
-                  gradient: LinearGradient(
-                    colors: [
-                      const Color(0xFF59D7FF).withOpacity(0.95),
-                      const Color(0xFF2B6CFF).withOpacity(0.95),
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 10 * s,
+            height: 46 * s,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(99),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  const Color(0xFF2EC4FF).withOpacity(0.95),
+                  const Color(0xFFFF2B2B).withOpacity(0.85),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(width: 14 * s),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "CtrlX Core - CPU",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 44 * s,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                    letterSpacing: 0.2,
                   ),
                 ),
-              ),
-              SizedBox(width: 14 * s),
-              Text(
-                "CtrlX Core - CPU",
-                style: TextStyle(
-                  fontSize: 34 * s,
-                  height: 1.0,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 0.2,
-                  color: Colors.white,
+                SizedBox(height: 6 * s),
+                Text(
+                  "Arquitectura, sistema operativo y ecosistema",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 16 * s,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white.withOpacity(0.78),
+                    letterSpacing: 0.2,
+                  ),
                 ),
-              ),
-              const Spacer(),
-              _ChipPill(s: s, text: "Slide 09"),
-            ],
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
 }
+
 
 class _ChipPill extends StatelessWidget {
   final double s;

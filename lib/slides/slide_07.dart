@@ -61,12 +61,12 @@ class _Slide07State extends State<Slide07> with SingleTickerProviderStateMixin {
         final footerSpace = 116.0 * s;
 
         // ====== DATA (edita textos + rutas) ======
-        final bg = 'assets/slide1/fondoslide1.jpeg'; // <-- TU FONDO SLIDE 7
+        final bg = 'assets/slide1/fondoslide1.jpeg'; 
 
         final items = <_CpuCardData>[
           _CpuCardData(
             tag: 'ctrlX CORE X3',
-            imagePath: 'assets/slide2/icono1.jpeg', // <-- TU IMG 1
+            imagePath: 'assets/slide7/slide7_1.jpeg',
             bullets: const [
               'ARM de cuatro núcleos de 64 bits',
               'Ethernet de 3 Gbit, eMMC de 4 GB',
@@ -76,7 +76,7 @@ class _Slide07State extends State<Slide07> with SingleTickerProviderStateMixin {
           ),
           _CpuCardData(
             tag: 'ctrlX CORE más X5',
-            imagePath: 'assets/slide2/icono1.jpeg', // <-- TU IMG 2
+            imagePath: 'assets/slide7/slide7_2.jpeg',
             bullets: const [
               'Intel ATOM de cuatro núcleos',
               'Ethernet de 5 Gbit, 16 GB de memoria',
@@ -86,7 +86,7 @@ class _Slide07State extends State<Slide07> with SingleTickerProviderStateMixin {
           ),
           _CpuCardData(
             tag: 'ctrlX CORE más X3',
-            imagePath: 'assets/slide2/icono1.jpeg', // <-- TU IMG 3
+            imagePath: 'assets/slide7/slide7_3.jpeg', 
             bullets: const [
               'ARM de cuatro núcleos de 64 bits',
               '3x Gbit Ethernet, 4 GB de memoria',
@@ -96,7 +96,7 @@ class _Slide07State extends State<Slide07> with SingleTickerProviderStateMixin {
           ),
           _CpuCardData(
             tag: 'ctrlX CORE más X7',
-            imagePath: 'assets/slide2/icono1.jpeg', // <-- TU IMG 4
+            imagePath: 'assets/slide7/slide7_4.jpeg',
             bullets: const [
               'Intel Core i7 – refrigeración activa',
               'Ethernet de 5 Gbit, 32 GB de memoria',

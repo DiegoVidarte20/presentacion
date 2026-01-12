@@ -76,16 +76,16 @@ class _Slide06State extends State<Slide06> with SingleTickerProviderStateMixin {
 
         // ===== tus 10 imágenes + títulos (solo el título es texto, la imagen va aparte)
         final items = <_TileData>[
-          _TileData('assets/slide2/icono1.jpeg', 'Built-insecurity'),
-          _TileData('assets/slide2/icono1.jpeg', 'Drives and motors'),
-          _TileData('assets/slide2/icono1.jpeg', 'IEC and non-IEC'),
-          _TileData('assets/slide2/icono1.jpeg', 'Runtime and engineering'),
-          _TileData('assets/slide2/icono1.jpeg', 'Motion, Robotics and CNC'),
-          _TileData('assets/slide2/icono1.jpeg', 'SafeLogic and SafeMotion'),
-          _TileData('assets/slide2/icono1.jpeg', 'EtherCAT and Gigabit Ethernet'),
-          _TileData('assets/slide2/icono1.jpeg', 'CPU and power'),
-          _TileData('assets/slide2/icono1.jpeg', 'Box and panel'),
-          _TileData('assets/slide2/icono1.jpeg', 'Hardware and software'),
+          _TileData('assets/slide6/slide6_1.png', 'Built-insecurity'),
+          _TileData('assets/slide6/slide6_2.png', 'Drives and motors'),
+          _TileData('assets/slide6/slide6_3.png', 'IEC and non-IEC'),
+          _TileData('assets/slide6/slide6_4.png', 'Runtime and engineering'),
+          _TileData('assets/slide6/slide6_5.png', 'Motion, Robotics and CNC'),
+          _TileData('assets/slide6/slide6_6.png', 'SafeLogic and SafeMotion'),
+          _TileData('assets/slide6/slide6_7.png', 'EtherCAT and Gigabit Ethernet'),
+          _TileData('assets/slide6/slide6_8.png', 'CPU and power'),
+          _TileData('assets/slide6/slide6_9.png', 'Box and panel'),
+          _TileData('assets/slide6/slide6_10.png', 'Hardware and software'),
         ];
 
         return AnimatedBuilder(

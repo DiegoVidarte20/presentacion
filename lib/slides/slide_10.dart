@@ -91,11 +91,11 @@ class _Slide10State extends State<Slide10> with SingleTickerProviderStateMixin {
                   children: [
                     SlideTransition(
                       position: _titleIn,
-                      child: _HeaderBar(
-                        s: s,
-                        title: "CtrlX I/O – Periferias",
-                        chip: "Slide 10",
-                      ),
+                      child: _HeaderGlass(
+  scale: s,
+  title: "CtrlX I/O – Periferias",
+),
+
                     ),
 
                     // ✅ separa el header del contenido principal
@@ -257,106 +257,96 @@ class _GridPainter extends CustomPainter {
 
 // ===================== HEADER =====================
 
-class _HeaderBar extends StatelessWidget {
-  final double s;
+class _HeaderGlass extends StatelessWidget {
+  final double scale;
   final String title;
-  final String chip;
-  const _HeaderBar({required this.s, required this.title, required this.chip});
+  final String? subtitle;
+
+  const _HeaderGlass({
+    required this.scale,
+    required this.title,
+    this.subtitle,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(22 * s),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20 * s, vertical: 14 * s),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                const Color(0xFF0B2B55).withOpacity(0.92),
-                const Color(0xFF0A3D7A).withOpacity(0.72),
-              ],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-            ),
-            border: Border.all(color: Colors.white.withOpacity(0.10)),
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 22,
-                offset: const Offset(0, 12),
-                color: Colors.black.withOpacity(0.35),
-              ),
-            ],
+    final hasSub = subtitle != null && subtitle!.trim().isNotEmpty;
+
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: 26 * scale,
+        vertical: hasSub ? 18 * scale : 16 * scale,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(18 * scale),
+        color: Colors.white.withOpacity(0.10),
+        border: Border.all(color: Colors.white.withOpacity(0.14)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.30),
+            blurRadius: 26 * scale,
+            offset: Offset(0, 12 * scale),
           ),
-          child: Row(
-            children: [
-              Container(
-                width: 10 * s,
-                height: 30 * s,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(99),
-                  gradient: LinearGradient(
-                    colors: [
-                      const Color(0xFF59D7FF).withOpacity(0.95),
-                      const Color(0xFF2B6CFF).withOpacity(0.95),
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-                ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 10 * scale,
+            height: hasSub ? 46 * scale : 42 * scale,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(99),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  const Color(0xFF2EC4FF).withOpacity(0.95),
+                  const Color(0xFFFF2B2B).withOpacity(0.85),
+                ],
               ),
-              SizedBox(width: 14 * s),
-              Expanded(
-                child: Text(
+            ),
+          ),
+          SizedBox(width: 14 * scale),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
                   title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize: 34 * s,
-                    height: 1.0,
+                    fontSize: 44 * scale,
                     fontWeight: FontWeight.w900,
-                    letterSpacing: 0.2,
                     color: Colors.white,
+                    letterSpacing: 0.2,
+                    height: 1.02,
                   ),
                 ),
-              ),
-              SizedBox(width: 12 * s),
-              _ChipPill(s: s, text: chip),
-            ],
+                if (hasSub) ...[
+                  SizedBox(height: 6 * scale),
+                  Text(
+                    subtitle!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 16 * scale,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white.withOpacity(0.78),
+                      letterSpacing: 0.2,
+                    ),
+                  ),
+                ],
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
 }
 
-class _ChipPill extends StatelessWidget {
-  final double s;
-  final String text;
-  const _ChipPill({required this.s, required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12 * s, vertical: 7 * s),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.10),
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: Colors.white.withOpacity(0.14)),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 12.5 * s,
-          color: Colors.white.withOpacity(0.92),
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.2,
-        ),
-      ),
-    );
-  }
-}
 
 // ===================== LEFT BULLET CARDS =====================
 

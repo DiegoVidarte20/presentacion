@@ -59,6 +59,9 @@ flutter:
   assets:
     - assets/slide1/
     - assets/slide2/
+    - assets/slide4/
+    - assets/slide6/
+    - assets/slide7/
     - assets/slide12/
     - assets/slide13/
     - assets/slide14/
@@ -86,6 +89,14 @@ flutter:
     - assets/slide38/
     - assets/slide39/
     - assets/slide40/
+    - assets/slide41/
+    - assets/slide43/
+    - assets/slide44/
+    - assets/slide45/
+    - assets/slide46/
+    - assets/slide47/
+    - assets/slide48/
+    - assets/slide49/
     
 
   # To add assets to your application, add an assets section, like this:

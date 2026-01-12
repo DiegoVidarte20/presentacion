@@ -14,48 +14,60 @@ class _Slide04State extends State<Slide04> with SingleTickerProviderStateMixin {
   late final Animation<Offset> _titleIn;
   late final Animation<double> _gridIn;
 
+  // ✅ const list sin errores
   final List<_ReasonItem> _items = const [
     _ReasonItem(
       n: 1,
       title: 'Solución Completa',
-      image: 'assets/slide2/icono1.jpeg',
+      image: 'assets/slide4/slide4_1.png',
     ),
-    _ReasonItem(n: 2, title: 'Menos es Más', image: 'assets/slide2/icono1.jpeg'),
+    _ReasonItem(
+      n: 2,
+      title: 'Menos es Más',
+      image: 'assets/slide4/slide4_2.png',
+    ),
     _ReasonItem(
       n: 3,
-      title: 'Rendimiento Consistente',
-      image: 'assets/slide2/icono1.jpeg',
+      title: 'Siempre Conectado',
+      images: [
+        'assets/slide4/slide4_3.png',
+        'assets/slide4/slide3_3_1.png',
+      ],
     ),
     _ReasonItem(
       n: 4,
-      title: 'Siempre Conectado',
-      image: 'assets/slide2/icono1.jpeg',
+      title: 'Rendimiento Consistente',
+      image: 'assets/slide4/slide4_4.png',
     ),
     _ReasonItem(
       n: 5,
       title: 'Arquitectura Uniforme',
-      image: 'assets/slide2/icono1.jpeg',
+      image: 'assets/slide4/slide4_5.png',
     ),
     _ReasonItem(
       n: 6,
       title: 'Sistema Más Abierto',
-      image: 'assets/slide2/icono1.jpeg',
+      image: 'assets/slide4/slide4_6.png',
     ),
-    _ReasonItem(n: 7, title: 'Integración IoT', image: 'assets/slide2/icono1.jpeg'),
+    _ReasonItem(
+      n: 7,
+      title: 'Integración IoT',
+      image: 'assets/slide4/slide4_7.png',
+    ),
     _ReasonItem(
       n: 8,
       title: 'Revolución Ingeniería',
-      image: 'assets/slide2/icono1.jpeg',
+      image: 'assets/slide4/slide4_8.png',
     ),
     _ReasonItem(
       n: 9,
       title: 'Servicio a Largo Plazo',
-      image: 'assets/slide2/icono1.jpeg',
+      image: 'assets/slide4/slide4_9.png',
     ),
     _ReasonItem(
       n: 10,
       title: 'Futuro Garantizado',
-      image: 'assets/slide2/icono1.jpeg',
+      image: 'assets/slide4/slide4_10.png',
     ),
   ];
 
@@ -71,13 +83,15 @@ class _Slide04State extends State<Slide04> with SingleTickerProviderStateMixin {
       parent: _c,
       curve: const Interval(0.0, 1.0, curve: Curves.easeOut),
     );
+
     _titleIn = Tween<Offset>(begin: const Offset(0, -0.12), end: Offset.zero)
         .animate(
-          CurvedAnimation(
-            parent: _c,
-            curve: const Interval(0.05, 0.45, curve: Curves.easeOutCubic),
-          ),
-        );
+      CurvedAnimation(
+        parent: _c,
+        curve: const Interval(0.05, 0.45, curve: Curves.easeOutCubic),
+      ),
+    );
+
     _gridIn = CurvedAnimation(
       parent: _c,
       curve: const Interval(0.20, 1.0, curve: Curves.easeOutBack),
@@ -107,15 +121,13 @@ class _Slide04State extends State<Slide04> with SingleTickerProviderStateMixin {
           builder: (_, __) {
             return Stack(
               children: [
-                // ===== Fondo (imagen) =====
                 Positioned.fill(
                   child: Image.asset(
-                    'assets/slide1/fondoslide1.jpeg', // cámbialo si tu fondo slide4 es otro
+                    'assets/slide1/fondoslide1.jpeg',
                     fit: BoxFit.cover,
                   ),
                 ),
 
-                // ===== Overlay (para que el texto reviente bien) =====
                 Positioned.fill(
                   child: Container(
                     decoration: BoxDecoration(
@@ -146,7 +158,6 @@ class _Slide04State extends State<Slide04> with SingleTickerProviderStateMixin {
                   ),
                 ),
 
-                // ===== Título (glass header) =====
                 Positioned(
                   left: padX,
                   right: padX,
@@ -160,7 +171,6 @@ class _Slide04State extends State<Slide04> with SingleTickerProviderStateMixin {
                   ),
                 ),
 
-                // ===== Grid (10 cards) =====
                 Positioned.fill(
                   child: Padding(
                     padding: EdgeInsets.fromLTRB(
@@ -172,17 +182,13 @@ class _Slide04State extends State<Slide04> with SingleTickerProviderStateMixin {
                     child: FadeTransition(
                       opacity: _fade,
                       child: ScaleTransition(
-                        scale: Tween<double>(
-                          begin: 0.98,
-                          end: 1.0,
-                        ).animate(_gridIn),
+                        scale: Tween<double>(begin: 0.98, end: 1.0).animate(_gridIn),
                         child: _ReasonsGrid(scale: s, items: _items),
                       ),
                     ),
                   ),
                 ),
 
-                // ===== Footer reusable =====
                 Positioned(
                   left: 0,
                   right: 0,
@@ -208,10 +214,7 @@ class _TopTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 28 * scale,
-        vertical: 18 * scale,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: 28 * scale, vertical: 18 * scale),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(22 * scale),
         color: Colors.white.withValues(alpha: 0.10),
@@ -286,15 +289,13 @@ class _ReasonsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 5 columnas x 2 filas (como tu ejemplo)
     return LayoutBuilder(
       builder: (_, c) {
         final crossAxisCount = 5;
         final gap = 18.0 * scale;
 
-        final itemW =
-            (c.maxWidth - gap * (crossAxisCount - 1)) / crossAxisCount;
-        final itemH = itemW * 0.92; // “cuadrado pro” sin verse aplastado
+        final itemW = (c.maxWidth - gap * (crossAxisCount - 1)) / crossAxisCount;
+        final itemH = itemW * 0.92;
 
         return Center(
           child: Wrap(
@@ -322,6 +323,10 @@ class _ReasonCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final imgs = (item.images != null && item.images!.isNotEmpty)
+        ? item.images!
+        : (item.image != null ? [item.image!] : const <String>[]);
+
     return Container(
       padding: EdgeInsets.all(14 * scale),
       decoration: BoxDecoration(
@@ -338,27 +343,56 @@ class _ReasonCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // bloque imagen (solo la imagen, ya tiene su texto dentro)
           Expanded(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(16 * scale),
               child: Container(
-                color: Colors.white.withValues(alpha: 0.90), // marco blanco pro
+                color: Colors.white.withValues(alpha: 0.90),
                 child: Padding(
                   padding: EdgeInsets.all(10 * scale),
-                  child: Image.asset(
-                    item.image,
-                    fit: BoxFit.contain,
-                    filterQuality: FilterQuality.high,
-                    isAntiAlias: true,
-                  ),
+                  child: imgs.length <= 1
+                      ? Image.asset(
+                          imgs.first,
+                          fit: BoxFit.contain,
+                          filterQuality: FilterQuality.high,
+                          isAntiAlias: true,
+                        )
+                      : Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.only(right: 6 * scale),
+                                child: Image.asset(
+                                  imgs[0],
+                                  fit: BoxFit.contain,
+                                  filterQuality: FilterQuality.high,
+                                  isAntiAlias: true,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 1.2 * scale,
+                              margin: EdgeInsets.symmetric(vertical: 6 * scale),
+                              color: Colors.black.withValues(alpha: 0.08),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 6 * scale),
+                                child: Image.asset(
+                                  imgs[1],
+                                  fit: BoxFit.contain,
+                                  filterQuality: FilterQuality.high,
+                                  isAntiAlias: true,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                 ),
               ),
             ),
           ),
-
           SizedBox(height: 12 * scale),
-
           Text(
             '${item.n}. ${item.title}',
             textAlign: TextAlign.center,
@@ -381,10 +415,14 @@ class _ReasonCard extends StatelessWidget {
 class _ReasonItem {
   final int n;
   final String title;
-  final String image;
+
+  final String? image;
+  final List<String>? images;
+
   const _ReasonItem({
     required this.n,
     required this.title,
-    required this.image,
+    this.image,
+    this.images,
   });
 }
