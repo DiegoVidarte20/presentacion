@@ -85,7 +85,7 @@ class _Slide15State extends State<Slide15> with SingleTickerProviderStateMixin {
     const bgAsset = "assets/slide1/fondoslide1.jpeg";
 
     // ✅ 1 sola imagen arriba (tira completa con equipos + texto debajo)
-    const topStrip = "assets/slide15/slide15.png"; // o .jpg
+    const topStrip = "assets/slide15/slide15_1.jpeg"; // o .jpg
 
     return Scaffold(
       body: Stack(
