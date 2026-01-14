@@ -3,6 +3,9 @@ import 'dart:ui' show ImageFilter;
 import 'package:flutter/material.dart';
 import 'package:presentacion/ui/footer_band.dart';
 
+import 'package:chewie/chewie.dart';
+import 'package:video_player/video_player.dart';
+
 class Slide10 extends StatefulWidget {
   const Slide10({super.key});
 
@@ -92,10 +95,9 @@ class _Slide10State extends State<Slide10> with SingleTickerProviderStateMixin {
                     SlideTransition(
                       position: _titleIn,
                       child: _HeaderGlass(
-  scale: s,
-  title: "CtrlX I/O – Periferias",
-),
-
+                        scale: s,
+                        title: "CtrlX I/O – Periferias",
+                      ),
                     ),
 
                     // ✅ separa el header del contenido principal
@@ -150,10 +152,10 @@ class _Slide10State extends State<Slide10> with SingleTickerProviderStateMixin {
                               flex: 67,
                               child: SlideTransition(
                                 position: _rightIn,
-                                child: _ImageSlotCard(
+                                child: _VideoSlotCard(
                                   s: s,
-                                  image: null,
-                                  hint: "ESPACIO PARA TU IMAGEN",
+                                  assetPath:
+                                      "assets/slide10/slide10_video.mp4", // <-- cambia tu ruta
                                 ),
                               ),
                             ),
@@ -262,11 +264,7 @@ class _HeaderGlass extends StatelessWidget {
   final String title;
   final String? subtitle;
 
-  const _HeaderGlass({
-    required this.scale,
-    required this.title,
-    this.subtitle,
-  });
+  const _HeaderGlass({required this.scale, required this.title, this.subtitle});
 
   @override
   Widget build(BuildContext context) {
@@ -346,7 +344,6 @@ class _HeaderGlass extends StatelessWidget {
     );
   }
 }
-
 
 // ===================== LEFT BULLET CARDS =====================
 
@@ -487,97 +484,197 @@ class _BulletList extends StatelessWidget {
 
 // ===================== RIGHT IMAGE SLOT =====================
 
-class _ImageSlotCard extends StatelessWidget {
+class _VideoSlotCard extends StatefulWidget {
   final double s;
-  final Widget? image; // pasa Image.asset(...) cuando lo tengas
-  final String hint;
+  final String assetPath;
 
-  const _ImageSlotCard({
-    required this.s,
-    required this.image,
-    required this.hint,
-  });
+  const _VideoSlotCard({required this.s, required this.assetPath});
+
+  @override
+  State<_VideoSlotCard> createState() => _VideoSlotCardState();
+}
+
+class _VideoSlotCardState extends State<_VideoSlotCard> {
+  VideoPlayerController? _vp;
+  ChewieController? _chewie;
+  bool _hover = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
+  ChewieController _buildChewie(
+    VideoPlayerController vp, {
+    required bool hover,
+  }) {
+    return ChewieController(
+      videoPlayerController: vp,
+      autoPlay: false, // importante para que no se “replayee” al recrear
+      looping: true,
+
+      showControls: true,
+      showControlsOnInitialize: true,
+      autoInitialize: true,
+
+      allowFullScreen: false,
+      allowMuting: true,
+
+      hideControlsTimer: hover
+          ? const Duration(days: 365)
+          : const Duration(seconds: 2),
+
+      materialProgressColors: ChewieProgressColors(
+        playedColor: const Color(0xFF2EC4FF),
+        handleColor: const Color(0xFF2EC4FF),
+        bufferedColor: Colors.white24,
+        backgroundColor: Colors.white10,
+      ),
+    );
+  }
+
+  Future<void> _init() async {
+    final vp = VideoPlayerController.asset(widget.assetPath);
+    await vp.initialize();
+
+    setState(() {
+      _vp = vp;
+      _chewie = _buildChewie(vp, hover: _hover);
+    });
+
+    // autoplay SOLO una vez (si lo quieres)
+    await vp.play();
+  }
+
+  void _setHover(bool v) {
+    if (_hover == v) return;
+
+    final vp = _vp;
+    if (vp == null) {
+      setState(() => _hover = v);
+      return;
+    }
+
+    final wasPlaying = vp.value.isPlaying;
+
+    setState(() => _hover = v);
+
+    _chewie?.dispose();
+    _chewie = _buildChewie(vp, hover: _hover);
+
+    if (!wasPlaying) {
+      Future.microtask(() async {
+        await vp.pause();
+      });
+    }
+
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    _chewie?.dispose();
+    _vp?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final s = widget.s;
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(28 * s),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.06),
-            borderRadius: BorderRadius.circular(28 * s),
-            border: Border.all(
-              color: const Color(0xFF59D7FF).withOpacity(0.55),
-              width: 2.0,
-            ),
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 26,
-                offset: const Offset(0, 14),
-                color: Colors.black.withOpacity(0.32),
-              ),
-            ],
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.06),
+          borderRadius: BorderRadius.circular(28 * s),
+          border: Border.all(
+            color: const Color(0xFF59D7FF).withOpacity(0.55),
+            width: 2.0,
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(26 * s),
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: Container(color: Colors.white.withOpacity(0.03)),
-                ),
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 26,
+              offset: const Offset(0, 14),
+              color: Colors.black.withOpacity(0.32),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(26 * s),
+          child: (_chewie == null)
+              ? Center(child: CircularProgressIndicator(strokeWidth: 3 * s))
+              : MouseRegion(
+                  onEnter: (_) => _setHover(true),
+                  onExit: (_) => _setHover(false),
+                  child: Stack(
+                    children: [
+                      Positioned.fill(child: Chewie(controller: _chewie!)),
 
-                // Si hay imagen -> la mostramos
-                if (image != null)
-                  Positioned.fill(child: image!)
-                else
-                  // Placeholder elegante
-                  Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.image_rounded,
-                          size: 46 * s,
-                          color: Colors.white.withOpacity(0.70),
+                      // tap central play/pause (sin bloquear barra)
+                      Center(
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () {
+                            final v = _vp;
+                            if (v == null) return;
+                            if (v.value.isPlaying) {
+                              v.pause();
+                            } else {
+                              v.play();
+                            }
+                            setState(() {});
+                          },
+                          child: SizedBox(width: 180 * s, height: 180 * s),
                         ),
-                        SizedBox(height: 10 * s),
-                        Text(
-                          hint,
-                          style: TextStyle(
-                            fontSize: 15 * s,
-                            letterSpacing: 1.0,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.white.withOpacity(0.75),
+                      ),
+
+                      // icono grande cuando está pausado (NO bloquea click)
+                      if (!(_vp?.value.isPlaying ?? true))
+                        Center(
+                          child: IgnorePointer(
+                            ignoring: true,
+                            child: Container(
+                              padding: EdgeInsets.all(14 * s),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.35),
+                                borderRadius: BorderRadius.circular(999),
+                                border: Border.all(
+                                  color: Colors.white.withOpacity(0.18),
+                                ),
+                              ),
+                              child: Icon(
+                                Icons.play_arrow_rounded,
+                                size: 64 * s,
+                                color: Colors.white.withOpacity(0.92),
+                              ),
+                            ),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
 
-                // shine top
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  top: 0,
-                  child: Container(
-                    height: 80 * s,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          Colors.white.withOpacity(0.10),
-                          Colors.transparent,
-                        ],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
+                      // shine top (igual al estilo del slot)
+                      Positioned(
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        child: Container(
+                          height: 80 * s,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.white.withOpacity(0.10),
+                                Colors.transparent,
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
         ),
       ),
     );

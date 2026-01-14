@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'slides/slides.dart';
 
+import 'package:video_player_media_kit/video_player_media_kit.dart';
+
 void main() {
+  VideoPlayerMediaKit.ensureInitialized(windows: true);
   runApp(const App());
 }
 

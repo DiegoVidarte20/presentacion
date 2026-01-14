@@ -2,6 +2,7 @@
 import 'dart:ui' show ImageFilter;
 import 'package:flutter/material.dart';
 import 'package:presentacion/ui/footer_band.dart';
+import 'package:video_player/video_player.dart';
 
 class Slide26 extends StatefulWidget {
   const Slide26({super.key});
@@ -41,27 +42,27 @@ class _Slide26State extends State<Slide26> with SingleTickerProviderStateMixin {
 
     _titleIn = Tween<Offset>(begin: const Offset(0, -0.10), end: Offset.zero)
         .animate(
-          CurvedAnimation(
-            parent: _c,
-            curve: const Interval(0.00, 0.45, curve: Curves.easeOutCubic),
-          ),
-        );
+      CurvedAnimation(
+        parent: _c,
+        curve: const Interval(0.00, 0.45, curve: Curves.easeOutCubic),
+      ),
+    );
 
     _leftIn = Tween<Offset>(begin: const Offset(-0.06, 0.04), end: Offset.zero)
         .animate(
-          CurvedAnimation(
-            parent: _c,
-            curve: const Interval(0.14, 0.96, curve: Curves.easeOutCubic),
-          ),
-        );
+      CurvedAnimation(
+        parent: _c,
+        curve: const Interval(0.14, 0.96, curve: Curves.easeOutCubic),
+      ),
+    );
 
     _rightIn = Tween<Offset>(begin: const Offset(0.06, 0.04), end: Offset.zero)
         .animate(
-          CurvedAnimation(
-            parent: _c,
-            curve: const Interval(0.18, 0.98, curve: Curves.easeOutCubic),
-          ),
-        );
+      CurvedAnimation(
+        parent: _c,
+        curve: const Interval(0.18, 0.98, curve: Curves.easeOutCubic),
+      ),
+    );
 
     _c.forward();
   }
@@ -82,9 +83,7 @@ class _Slide26State extends State<Slide26> with SingleTickerProviderStateMixin {
     final s = _scaleByWidth(context);
 
     const bgAsset = "assets/slide1/fondoslide1.jpeg";
-
-    // ✅ Cuando tengas tu imagen, solo cambia este path (si no existe, muestra placeholder)
-    const rightImg = "assets/slide26/slide26_1.png";
+    const rightVideo = "assets/slide26/slide26_video.mp4";
 
     return Scaffold(
       body: Stack(
@@ -135,7 +134,7 @@ class _Slide26State extends State<Slide26> with SingleTickerProviderStateMixin {
 
                             SizedBox(width: 18 * s),
 
-                            // ================= RIGHT (IMAGE SPACE) =================
+                            // ================= RIGHT (VIDEO) =================
                             Expanded(
                               flex: 62,
                               child: SlideTransition(
@@ -149,9 +148,9 @@ class _Slide26State extends State<Slide26> with SingleTickerProviderStateMixin {
                                     14 * s,
                                     14 * s,
                                   ),
-                                  child: _RightImageSpace(
+                                  child: _RightVideoSpace(
                                     s: s,
-                                    asset: rightImg,
+                                    assetPath: rightVideo,
                                   ),
                                 ),
                               ),
@@ -191,8 +190,8 @@ class _LeftContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final h = TextStyle(
-      fontSize: 22.0 * s, // sube base pero lo controla FittedBox (no revienta)
-      height: 1.05, // más compacto
+      fontSize: 22.0 * s,
+      height: 1.05,
       fontWeight: FontWeight.w900,
       color: Colors.white.withOpacity(0.96),
       shadows: [
@@ -212,7 +211,7 @@ class _LeftContent extends StatelessWidget {
     );
 
     return Padding(
-       padding: EdgeInsets.fromLTRB(10 * s, 8 * s, 6 * s, 0), // 👈 top/left
+      padding: EdgeInsets.fromLTRB(10 * s, 8 * s, 6 * s, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -221,63 +220,56 @@ class _LeftContent extends StatelessWidget {
             child: FittedBox(
               fit: BoxFit.scaleDown,
               alignment: Alignment.centerLeft,
-            child: Text(
-              "Las características de ctrlX MOTION:",
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: h.copyWith(
-                fontSize:
-                    21.0 *
-                    s, // un toque menos (antes 19.8*s, pero aquí va dentro de FittedBox)
-                height: 1.05,
+              child: Text(
+                "Las características de ctrlX MOTION:",
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: h.copyWith(fontSize: 21.0 * s, height: 1.05),
               ),
             ),
           ),
-        ),
 
-        SizedBox(height: 12 * s),
+          SizedBox(height: 12 * s),
 
-        _InnerGlassPanel(
-          s: s,
-          padding: EdgeInsets.fromLTRB(14 * s, 12 * s, 14 * s, 12 * s),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              _Bullet(
-                text: "Control para máquinas complejas de alta producción",
-              ),
-              _Bullet(text: "Alta velocidad y máximo rendimiento"),
-              _Bullet(text: "Máxima escalabilidad"),
-              _Bullet(text: "Libre elección del lenguaje de programación"),
-              _Bullet(text: "Ingeniería sencilla e intuitiva"),
-            ],
-          ),
-        ),
-
-        SizedBox(height: 18 * s),
-        Text("Aplicaciones y funciones tecnológicas", style: h),
-        SizedBox(height: 12 * s),
-
-        Expanded(
-          child: _InnerGlassPanel(
+          _InnerGlassPanel(
             s: s,
             padding: EdgeInsets.fromLTRB(14 * s, 12 * s, 14 * s, 12 * s),
-            child: DefaultTextStyle(
-              style: base,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  _Bullet(text: "Aplicación ctrlX MOTION"),
-                  _Bullet(text: "Robótica cartesiana"),
-                  _Bullet(text: "Entorno de desarrollo integrado"),
-                  _Bullet(text: "Funciones de la tecnología"),
-                ],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                _Bullet(text: "Control para máquinas complejas de alta producción"),
+                _Bullet(text: "Alta velocidad y máximo rendimiento"),
+                _Bullet(text: "Máxima escalabilidad"),
+                _Bullet(text: "Libre elección del lenguaje de programación"),
+                _Bullet(text: "Ingeniería sencilla e intuitiva"),
+              ],
+            ),
+          ),
+
+          SizedBox(height: 18 * s),
+          Text("Aplicaciones y funciones tecnológicas", style: h),
+          SizedBox(height: 12 * s),
+
+          Expanded(
+            child: _InnerGlassPanel(
+              s: s,
+              padding: EdgeInsets.fromLTRB(14 * s, 12 * s, 14 * s, 12 * s),
+              child: DefaultTextStyle(
+                style: base,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    _Bullet(text: "Aplicación ctrlX MOTION"),
+                    _Bullet(text: "Robótica cartesiana"),
+                    _Bullet(text: "Entorno de desarrollo integrado"),
+                    _Bullet(text: "Funciones de la tecnología"),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ],
-      )
+        ],
+      ),
     );
   }
 }
@@ -288,7 +280,6 @@ class _Bullet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // usa DefaultTextStyle del padre si existe
     final s = (context.findAncestorWidgetOfExactType<_LeftContent>()?.s) ?? 1.0;
     final textColor = Colors.white.withOpacity(0.92);
 
@@ -333,13 +324,13 @@ class _Bullet extends StatelessWidget {
   }
 }
 
-// ===================== RIGHT IMAGE SPACE =====================
+// ===================== RIGHT VIDEO SPACE =====================
 
-class _RightImageSpace extends StatelessWidget {
+class _RightVideoSpace extends StatelessWidget {
   final double s;
-  final String asset;
+  final String assetPath;
 
-  const _RightImageSpace({required this.s, required this.asset});
+  const _RightVideoSpace({required this.s, required this.assetPath});
 
   @override
   Widget build(BuildContext context) {
@@ -349,7 +340,7 @@ class _RightImageSpace extends StatelessWidget {
       borderRadius: BorderRadius.circular(r),
       child: Stack(
         children: [
-          // fondo interno glass suave
+          // glass soft
           Positioned.fill(
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(sigmaX: 18 * s, sigmaY: 18 * s),
@@ -362,39 +353,27 @@ class _RightImageSpace extends StatelessWidget {
             ),
           ),
 
-          // ✅ espacio para tu imagen (si no existe, placeholder)
+          // video
           Positioned.fill(
-            child: _FitImageToCardGlass(
+            child: _SimpleVideoPlayer(
               s: s,
-              asset: asset,
-              topInset: 14 * s,
-              sideInset: 14 * s,
-              bottomInset: 14 * s,
-              blurOpacity: 0.10,
-              overlayOpacity: 0.06,
-              fit: BoxFit.contain,
+              assetPath: assetPath,
             ),
           ),
 
-          // borde suave
+          // border
           Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(r),
-                border: Border.all(
-                  color: Colors.white.withOpacity(0.14),
-                  width: 1.6,
+            child: IgnorePointer(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(r),
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.14),
+                    width: 1.6,
+                  ),
                 ),
               ),
             ),
-          ),
-
-          // hint glass (opcional, se ve paja y no estorba)
-          Positioned(
-            left: 18 * s,
-            right: 18 * s,
-            bottom: 18 * s,
-            child: _GlassHintPill(s: s, text: "Espacio reservado para imagen"),
           ),
         ],
       ),
@@ -402,56 +381,265 @@ class _RightImageSpace extends StatelessWidget {
   }
 }
 
-class _GlassHintPill extends StatelessWidget {
+// ===================== SIMPLE VIDEO PLAYER (SIN CHEWIE) =====================
+//
+// ✅ Video player simple que SÍ FUNCIONA
+// - Click en cualquier parte = play/pause
+// - Barra de progreso funcional
+// - Controles de volumen
+// - Todo responsive
+//
+class _SimpleVideoPlayer extends StatefulWidget {
   final double s;
-  final String text;
+  final String assetPath;
 
-  const _GlassHintPill({required this.s, required this.text});
+  const _SimpleVideoPlayer({required this.s, required this.assetPath});
+
+  @override
+  State<_SimpleVideoPlayer> createState() => _SimpleVideoPlayerState();
+}
+
+class _SimpleVideoPlayerState extends State<_SimpleVideoPlayer> {
+  late VideoPlayerController _controller;
+  bool _isInitialized = false;
+  bool _showControls = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _initVideo();
+  }
+
+  Future<void> _initVideo() async {
+    _controller = VideoPlayerController.asset(widget.assetPath);
+    await _controller.initialize();
+    await _controller.setLooping(true);
+    
+    if (mounted) {
+      setState(() => _isInitialized = true);
+      // Autoplay
+      _controller.play();
+    }
+
+    // Listener para actualizar la UI cuando cambia el estado
+    _controller.addListener(() {
+      if (mounted) setState(() {});
+    });
+  }
+
+  void _togglePlayPause() {
+    setState(() {
+      if (_controller.value.isPlaying) {
+        _controller.pause();
+      } else {
+        _controller.play();
+      }
+    });
+  }
+
+  void _toggleMute() {
+    setState(() {
+      _controller.setVolume(_controller.value.volume > 0 ? 0 : 1);
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(18 * s),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16 * s, vertical: 10 * s),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18 * s),
-            color: Colors.white.withOpacity(0.10),
-            border: Border.all(color: Colors.white.withOpacity(0.14)),
-            gradient: LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              colors: [
-                const Color(0xFF2EC4FF).withOpacity(0.10),
-                Colors.white.withOpacity(0.08),
-                const Color(0xFFFF2B2B).withOpacity(0.08),
-              ],
-            ),
+    if (!_isInitialized) {
+      return Container(
+        color: Colors.black.withOpacity(0.3),
+        child: Center(
+          child: CircularProgressIndicator(
+            strokeWidth: 3 * widget.s,
+            color: const Color(0xFF2EC4FF),
           ),
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 18 * s,
-              fontWeight: FontWeight.w900,
-              color: Colors.white.withOpacity(0.95),
-              letterSpacing: 0.2,
-              shadows: [
-                Shadow(
-                  blurRadius: 14,
-                  offset: const Offset(0, 8),
-                  color: Colors.black.withOpacity(0.22),
+        ),
+      );
+    }
+
+    final s = widget.s;
+    final duration = _controller.value.duration;
+    final position = _controller.value.position;
+    final isPlaying = _controller.value.isPlaying;
+    final isMuted = _controller.value.volume == 0;
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => _showControls = true),
+      onExit: (_) {
+        if (isPlaying) {
+          setState(() => _showControls = false);
+        }
+      },
+      child: GestureDetector(
+        onTap: _togglePlayPause,
+        child: Container(
+          color: Colors.black,
+          child: Stack(
+            children: [
+              // ===== VIDEO =====
+              Center(
+                child: AspectRatio(
+                  aspectRatio: _controller.value.aspectRatio,
+                  child: VideoPlayer(_controller),
                 ),
-              ],
-            ),
+              ),
+
+              // ===== GRADIENT OVERLAY =====
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.black.withOpacity(0.0),
+                          Colors.black.withOpacity(0.6),
+                        ],
+                        stops: const [0.6, 1.0],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              // ===== PLAY/PAUSE ICON (CENTRO) =====
+              if (!isPlaying || _showControls)
+                Center(
+                  child: AnimatedOpacity(
+                    opacity: isPlaying ? 0.0 : 1.0,
+                    duration: const Duration(milliseconds: 200),
+                    child: Container(
+                      padding: EdgeInsets.all(16 * s),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.black.withOpacity(0.6),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.3),
+                          width: 2,
+                        ),
+                      ),
+                      child: Icon(
+                        Icons.play_arrow_rounded,
+                        size: 64 * s,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+
+              // ===== CONTROLES (ABAJO) =====
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: AnimatedOpacity(
+                  opacity: _showControls ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 300),
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(
+                      16 * s,
+                      16 * s,
+                      16 * s,
+                      16 * s,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // ===== SEEKBAR =====
+                        VideoProgressIndicator(
+                          _controller,
+                          allowScrubbing: true,
+                          colors: VideoProgressColors(
+                            playedColor: const Color(0xFF2EC4FF),
+                            bufferedColor: Colors.white.withOpacity(0.3),
+                            backgroundColor: Colors.white.withOpacity(0.1),
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 8 * s),
+                        ),
+
+                        SizedBox(height: 8 * s),
+
+                        // ===== BOTONES Y TIEMPO =====
+                        Row(
+                          children: [
+                            // Play/Pause button
+                            GestureDetector(
+                              onTap: _togglePlayPause,
+                              child: Container(
+                                padding: EdgeInsets.all(8 * s),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.white.withOpacity(0.1),
+                                ),
+                                child: Icon(
+                                  isPlaying
+                                      ? Icons.pause_rounded
+                                      : Icons.play_arrow_rounded,
+                                  color: Colors.white,
+                                  size: 28 * s,
+                                ),
+                              ),
+                            ),
+
+                            SizedBox(width: 12 * s),
+
+                            // Mute button
+                            GestureDetector(
+                              onTap: _toggleMute,
+                              child: Container(
+                                padding: EdgeInsets.all(8 * s),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.white.withOpacity(0.1),
+                                ),
+                                child: Icon(
+                                  isMuted
+                                      ? Icons.volume_off_rounded
+                                      : Icons.volume_up_rounded,
+                                  color: Colors.white,
+                                  size: 24 * s,
+                                ),
+                              ),
+                            ),
+
+                            SizedBox(width: 12 * s),
+
+                            // Tiempo
+                            Text(
+                              '${_formatDuration(position)} / ${_formatDuration(duration)}',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14 * s,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+
+                            const Spacer(),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
+  }
+
+  String _formatDuration(Duration d) {
+    final min = d.inMinutes.remainder(60).toString().padLeft(2, '0');
+    final sec = d.inSeconds.remainder(60).toString().padLeft(2, '0');
+    return '$min:$sec';
   }
 }
 
@@ -632,93 +820,6 @@ class _InnerGlassPanel extends StatelessWidget {
             border: Border.all(color: Colors.white.withOpacity(0.10)),
           ),
           child: child,
-        ),
-      ),
-    );
-  }
-}
-
-// ===================== IMAGE FIT (GLASS) =====================
-
-class _FitImageToCardGlass extends StatelessWidget {
-  final double s;
-  final String asset;
-  final double topInset;
-  final double sideInset;
-  final double bottomInset;
-  final double blurOpacity;
-  final double overlayOpacity;
-  final BoxFit fit;
-
-  const _FitImageToCardGlass({
-    required this.s,
-    required this.asset,
-    this.topInset = 10,
-    this.sideInset = 10,
-    this.bottomInset = 10,
-    this.blurOpacity = 0.12,
-    this.overlayOpacity = 0.05,
-    this.fit = BoxFit.cover,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    Widget fallback() => _ImageFallbackGlass(s: s);
-
-    return Stack(
-      children: [
-        Positioned.fill(
-          child: ImageFiltered(
-            imageFilter: ImageFilter.blur(sigmaX: 18 * s, sigmaY: 18 * s),
-            child: Opacity(
-              opacity: blurOpacity,
-              child: Image.asset(
-                asset,
-                fit: BoxFit.cover,
-                alignment: Alignment.center,
-                errorBuilder: (_, __, ___) => fallback(),
-              ),
-            ),
-          ),
-        ),
-        Positioned.fill(
-          child: Container(color: Colors.black.withOpacity(overlayOpacity)),
-        ),
-        Positioned.fill(
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(
-              sideInset * s,
-              topInset * s,
-              sideInset * s,
-              bottomInset * s,
-            ),
-            child: Image.asset(
-              asset,
-              fit: fit,
-              alignment: Alignment.center,
-              filterQuality: FilterQuality.high,
-              errorBuilder: (_, __, ___) => fallback(),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _ImageFallbackGlass extends StatelessWidget {
-  final double s;
-  const _ImageFallbackGlass({required this.s});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white.withOpacity(0.04),
-      child: Center(
-        child: Icon(
-          Icons.image_rounded,
-          size: 74 * s,
-          color: Colors.white.withOpacity(0.70),
         ),
       ),
     );

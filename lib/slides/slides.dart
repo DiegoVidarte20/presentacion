@@ -61,7 +61,6 @@ class Slides extends StatefulWidget {
 class _SlidesState extends State<Slides> {
   int _index = 0;
 
-  // Lista de tus slides (agrega más acá)
   late final List<Widget> _slides = const [
     Slide01(),
     Slide02(),
@@ -111,8 +110,7 @@ class _SlidesState extends State<Slides> {
     Slide46(),
     Slide47(),
     Slide48(),
-    Slide49()
-
+    Slide49(),
   ];
 
   int get _total => _slides.length;
@@ -152,8 +150,9 @@ class _SlidesState extends State<Slides> {
         autofocus: true,
         onKey: _onKey,
         child: GestureDetector(
-          // opcional: click/tap para avanzar
-          onTap: _next,
+          // ✅ quitado: click/tap para avanzar
+          // onTap: _next,
+
           // opcional: swipe para móvil
           onHorizontalDragEnd: (d) {
             if ((d.primaryVelocity ?? 0) < 0) _next(); // swipe izquierda
@@ -161,7 +160,6 @@ class _SlidesState extends State<Slides> {
           },
           child: Stack(
             children: [
-              // Transición suave entre slides
               AnimatedSwitcher(
                 duration: const Duration(milliseconds: 250),
                 switchInCurve: Curves.easeOut,
@@ -171,8 +169,6 @@ class _SlidesState extends State<Slides> {
                   child: _slides[_index],
                 ),
               ),
-
-              // Indicador simple (si no quieres, bórralo)
               Positioned(
                 left: 18,
                 bottom: 12,

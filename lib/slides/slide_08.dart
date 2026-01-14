@@ -1,6 +1,8 @@
 // lib/slides/slide_08.dart
 import 'package:flutter/material.dart';
 import 'package:presentacion/ui/footer_band.dart';
+import 'package:chewie/chewie.dart';
+import 'package:video_player/video_player.dart';
 
 class Slide08 extends StatefulWidget {
   const Slide08({super.key});
@@ -55,7 +57,6 @@ class _Slide08State extends State<Slide08> with SingleTickerProviderStateMixin {
     return LayoutBuilder(
       builder: (_, c) {
         final w = c.maxWidth;
-        final h = c.maxHeight;
         final s = (w / 1400).clamp(0.75, 1.25);
 
         final padX = 64.0 * s;
@@ -148,10 +149,9 @@ class _Slide08State extends State<Slide08> with SingleTickerProviderStateMixin {
                                 builder: (_, lc) {
                                   final gap = 18.0 * s;
 
-                                  // altura disponible real (sin header/footer porque ya estás dentro del Padding)
+                                  // altura disponible real
                                   final availH = lc.maxHeight;
 
-                                  // 👇 topRow un poco más chico, bottomRow un poco más grande
                                   final topRowH = (availH * 0.42).clamp(
                                     220.0 * s,
                                     320.0 * s,
@@ -161,13 +161,12 @@ class _Slide08State extends State<Slide08> with SingleTickerProviderStateMixin {
                                     360.0 * s,
                                   );
 
-                                  // aire arriba/abajo
                                   final used = topRowH + gap + bottomRowH;
                                   final free = (availH - used).clamp(
                                     0.0,
                                     availH,
                                   );
-                                  final topAir = free * 0.45; // más aire arriba
+                                  final topAir = free * 0.45;
                                   final bottomAir = free - topAir;
 
                                   return Column(
@@ -269,29 +268,25 @@ class _Slide08State extends State<Slide08> with SingleTickerProviderStateMixin {
 
                             SizedBox(width: 22 * s),
 
-                            // ===== Derecha: espacio para imagen grande =====
+                            // ===== Derecha: video =====
                             Expanded(
                               flex: 6,
                               child: LayoutBuilder(
                                 builder: (_, rc) {
                                   final availH = rc.maxHeight;
-
-                                  // 👇 altura del placeholder (no full height)
                                   final boxH = (availH * 0.82).clamp(
                                     360.0 * s,
                                     availH,
                                   );
 
                                   return Align(
-                                    alignment: Alignment
-                                        .center, // centro vertical/horizontal
+                                    alignment: Alignment.center,
                                     child: SizedBox(
                                       height: boxH,
-                                      child: _ImagePlaceholder(
+                                      child: _AssetVideoBox(
                                         scale: s,
-                                        label: 'ESPACIO PARA IMAGEN',
-                                        hint:
-                                            'Coloca aquí tu imagen grande (Image.asset / diagramita / foto)',
+                                        assetPath:
+                                            'assets/slide8/slide8_video.mp4',
                                       ),
                                     ),
                                   );
@@ -530,85 +525,183 @@ class _Bullets extends StatelessWidget {
   }
 }
 
-class _ImagePlaceholder extends StatelessWidget {
+class _AssetVideoBox extends StatefulWidget {
   final double scale;
-  final String label;
-  final String hint;
+  final String assetPath;
 
-  const _ImagePlaceholder({
-    required this.scale,
-    required this.label,
-    required this.hint,
-  });
+  const _AssetVideoBox({required this.scale, required this.assetPath});
+
+  @override
+  State<_AssetVideoBox> createState() => _AssetVideoBoxState();
+}
+
+class _AssetVideoBoxState extends State<_AssetVideoBox> {
+  VideoPlayerController? _vp;
+  ChewieController? _chewie;
+
+  bool _hover = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
+  ChewieController _buildChewie(
+    VideoPlayerController vp, {
+    required bool hover,
+  }) {
+    return ChewieController(
+      videoPlayerController: vp,
+
+      // ❌ autoPlay: true,
+      autoPlay: false, // ✅ IMPORTANTÍSIMO: evita que se “re-playee” al recrear
+
+      looping: true,
+
+      showControls: true,
+      showControlsOnInitialize: true,
+      autoInitialize: true,
+
+      allowFullScreen: false,
+      allowMuting: true,
+
+      hideControlsTimer: hover
+          ? const Duration(days: 365)
+          : const Duration(seconds: 2),
+
+      materialProgressColors: ChewieProgressColors(
+        playedColor: const Color(0xFF2EC4FF),
+        handleColor: const Color(0xFF2EC4FF),
+        bufferedColor: Colors.white24,
+        backgroundColor: Colors.white10,
+      ),
+    );
+  }
+
+  Future<void> _init() async {
+    final vp = VideoPlayerController.asset(widget.assetPath);
+    await vp.initialize();
+
+    setState(() {
+      _vp = vp;
+      _chewie = _buildChewie(vp, hover: _hover);
+    });
+
+    // ✅ Autoplay controlado por ti (solo una vez)
+    await vp.play();
+  }
+
+  void _setHover(bool v) {
+    if (_hover == v) return;
+
+    final vp = _vp;
+    if (vp == null) {
+      setState(() => _hover = v);
+      return;
+    }
+
+    final wasPlaying = vp.value.isPlaying;
+
+    setState(() => _hover = v);
+
+    _chewie?.dispose();
+    _chewie = _buildChewie(vp, hover: _hover);
+
+    // ✅ Si estaba pausado, asegúralo DESPUÉS (Chewie a veces mete play async)
+    if (!wasPlaying) {
+      Future.microtask(() async {
+        await vp.pause();
+      });
+    }
+
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    _chewie?.dispose();
+    _vp?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final s = widget.scale;
+
     return Container(
-      padding: EdgeInsets.all(22 * scale),
+      padding: EdgeInsets.all(22 * s),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(26 * scale),
+        borderRadius: BorderRadius.circular(26 * s),
         color: Colors.white.withValues(alpha: 0.06),
         border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.22),
-            blurRadius: 22 * scale,
-            offset: Offset(0, 12 * scale),
+            blurRadius: 22 * s,
+            offset: Offset(0, 12 * s),
           ),
         ],
       ),
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(22 * scale),
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    const Color(0xFF2EC4FF).withValues(alpha: 0.10),
-                    Colors.white.withValues(alpha: 0.03),
-                    const Color(0xFFFF2B2B).withValues(alpha: 0.08),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(22 * s),
+        child: (_chewie == null)
+            ? Center(child: CircularProgressIndicator(strokeWidth: 3 * s))
+            : MouseRegion(
+                onEnter: (_) => _setHover(true),
+                onExit: (_) => _setHover(false),
+                child: Stack(
+                  children: [
+                    Positioned.fill(child: Chewie(controller: _chewie!)),
+
+                    // ✅ Tap en el centro para play/pause (sin bloquear la barra)
+                    Center(
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () {
+                          final v = _vp;
+                          if (v == null) return;
+                          if (v.value.isPlaying) {
+                            v.pause();
+                          } else {
+                            v.play();
+                          }
+                          setState(() {});
+                        },
+                        child: SizedBox(
+                          width: 180 * s,
+                          height: 180 * s,
+                          child: const SizedBox.shrink(),
+                        ),
+                      ),
+                    ),
+
+                    // ✅ Icono grande cuando está pausado
+                    // ✅ Icono grande cuando está pausado (NO bloquea clicks)
+                    if (!(_vp?.value.isPlaying ?? true))
+                      Center(
+                        child: IgnorePointer(
+                          ignoring: true,
+                          child: Container(
+                            padding: EdgeInsets.all(14 * s),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withValues(alpha: 0.35),
+                              borderRadius: BorderRadius.circular(999),
+                              border: Border.all(
+                                color: Colors.white.withValues(alpha: 0.18),
+                              ),
+                            ),
+                            child: Icon(
+                              Icons.play_arrow_rounded,
+                              size: 64 * s,
+                              color: Colors.white.withValues(alpha: 0.92),
+                            ),
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ),
-            ),
-          ),
-          Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.image_outlined,
-                  size: 56 * scale,
-                  color: Colors.white.withValues(alpha: 0.78),
-                ),
-                SizedBox(height: 12 * scale),
-                Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 18 * scale,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white.withValues(alpha: 0.92),
-                    letterSpacing: 0.6,
-                  ),
-                ),
-                SizedBox(height: 10 * scale),
-                Text(
-                  hint,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14 * scale,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white.withValues(alpha: 0.70),
-                    height: 1.25,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

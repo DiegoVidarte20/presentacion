@@ -239,10 +239,9 @@ class _Slide11State extends State<Slide11> with SingleTickerProviderStateMixin {
                               position: _rightIn,
                               child: _ImageSlot(
                                 s: s,
-                                image: null,
                                 hint: "ESPACIO PARA TU IMAGEN",
                                 // cuando quieras:
-                                // image: Image.asset("assets/slide11/tu_img.png", fit: BoxFit.cover),
+                                image: Image.asset("assets/slide11/slide11.png", fit: BoxFit.contain),
                               ),
                             ),
                           ),
