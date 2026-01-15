@@ -39,6 +39,7 @@ dependencies:
 
   video_player_media_kit: ^1.0.5
   media_kit_libs_windows_video: any
+  window_manager: ^0.5.1
 
 dev_dependencies:
   flutter_test:
